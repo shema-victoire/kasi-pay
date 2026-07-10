@@ -1,70 +1,80 @@
-import { Eye, EyeOff, TrendingUp, TrendingDown, Building2, Wallet } from 'lucide-react';
-import { useState } from 'react';
+import { Eye, EyeOff, TrendingUp, TrendingDown, Building2, Plus } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { supabase } from '../lib/supabaseClient';
+
+interface LinkedAccount {
+  id: string;
+  provider_name: string;
+  account_type: string;
+  account_number_masked: string | null;
+  balance: number;
+  last_change: number;
+  icon: string | null;
+}
+
+const ICON_OPTIONS = ['🏦', '🏛️', '📱', '📲', '💰'];
 
 export function AccountAggregation() {
+  const { user } = useAuth();
   const [showBalances, setShowBalances] = useState(true);
+  const [accounts, setAccounts] = useState<LinkedAccount[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showAdd, setShowAdd] = useState(false);
 
-  const accounts = [
-    {
-      id: 1,
-      name: 'Bank of Kigali',
-      type: 'Savings Account',
-      balance: 1250000,
-      change: 45000,
-      changePercent: 3.7,
-      accountNumber: '**** 1234',
-      icon: '🏦',
-      color: 'blue'
-    },
-    {
-      id: 2,
-      name: 'Equity Bank',
-      type: 'Current Account',
-      balance: 850000,
-      change: -12000,
-      changePercent: -1.4,
-      accountNumber: '**** 5678',
-      icon: '🏛️',
-      color: 'red'
-    },
-    {
-      id: 3,
-      name: 'MTN Mobile Money',
-      type: 'Mobile Wallet',
-      balance: 284500,
-      change: 15000,
-      changePercent: 5.6,
-      accountNumber: '**** 3456',
-      icon: '📱',
-      color: 'yellow'
-    },
-    {
-      id: 4,
-      name: 'Airtel Money',
-      type: 'Mobile Wallet',
-      balance: 125000,
-      change: 8000,
-      changePercent: 6.8,
-      accountNumber: '**** 7890',
-      icon: '📲',
-      color: 'orange'
-    },
-    {
-      id: 5,
-      name: 'I&M Bank',
-      type: 'Fixed Deposit',
-      balance: 3500000,
-      change: 25000,
-      changePercent: 0.7,
-      accountNumber: '**** 9012',
-      icon: '💰',
-      color: 'green'
-    },
-  ];
+  const [providerName, setProviderName] = useState('');
+  const [accountType, setAccountType] = useState('');
+  const [balance, setBalance] = useState('');
 
-  const totalBalance = accounts.reduce((sum, acc) => sum + acc.balance, 0);
-  const totalChange = accounts.reduce((sum, acc) => sum + acc.change, 0);
-  const totalChangePercent = (totalChange / (totalBalance - totalChange)) * 100;
+  const loadAccounts = async () => {
+    if (!user) return;
+    setLoading(true);
+    const { data } = await supabase
+      .from('linked_accounts')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at');
+    setAccounts((data as LinkedAccount[]) ?? []);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    loadAccounts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
+  const handleAddAccount = async () => {
+    if (!user || !providerName || !accountType || !balance) return;
+    const icon = ICON_OPTIONS[accounts.length % ICON_OPTIONS.length];
+    const { error } = await supabase.from('linked_accounts').insert({
+      user_id: user.id,
+      provider_name: providerName,
+      account_type: accountType,
+      balance: Number(balance),
+      last_change: 0,
+      icon,
+    });
+    if (!error) {
+      setProviderName('');
+      setAccountType('');
+      setBalance('');
+      setShowAdd(false);
+      loadAccounts();
+    }
+  };
+
+  const totalBalance = accounts.reduce((sum, a) => sum + Number(a.balance), 0);
+  const totalChange = accounts.reduce((sum, a) => sum + Number(a.last_change), 0);
+  const totalChangePercent =
+    totalBalance - totalChange !== 0 ? (totalChange / (totalBalance - totalChange)) * 100 : 0;
+
+  if (loading) {
+    return (
+      <div className="bg-white dark:bg-[#1a1a1a] rounded-2xl border border-gray-200 dark:border-gray-800 p-6 text-center text-gray-500">
+        Loading accounts…
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white dark:bg-[#1a1a1a] rounded-2xl border border-gray-200 dark:border-gray-800 p-6">
@@ -74,7 +84,9 @@ export function AccountAggregation() {
             <Building2 className="w-5 h-5" />
             Account Aggregation
           </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">All your accounts in one place</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+            Your accounts, entered manually — no live bank connection yet
+          </p>
         </div>
         <button
           onClick={() => setShowBalances(!showBalances)}
@@ -95,83 +107,103 @@ export function AccountAggregation() {
           <h2 className="text-4xl font-bold kp-text-on-gradient">
             {showBalances ? `RWF ${totalBalance.toLocaleString()}` : 'RWF ••••••••'}
           </h2>
-          <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-sm font-medium ${
-            totalChange >= 0
-              ? 'bg-white/20 text-white'
-              : 'bg-white/15 text-white/90'
-          }`}>
-            {totalChange >= 0 ? (
-              <TrendingUp className="w-4 h-4" />
-            ) : (
-              <TrendingDown className="w-4 h-4" />
-            )}
-            {totalChangePercent >= 0 ? '+' : ''}{totalChangePercent.toFixed(1)}%
-          </div>
+          {accounts.length > 0 && (
+            <div
+              className={`flex items-center gap-1 px-2 py-1 rounded-full text-sm font-medium ${
+                totalChange >= 0 ? 'bg-white/20 text-white' : 'bg-white/15 text-white/90'
+              }`}
+            >
+              {totalChange >= 0 ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
+              {totalChangePercent >= 0 ? '+' : ''}{totalChangePercent.toFixed(1)}%
+            </div>
+          )}
         </div>
-        <p className="text-sm text-white/90 mt-2">
-          {totalChange >= 0 ? '+' : ''}RWF {Math.abs(totalChange).toLocaleString()} this month
-        </p>
       </div>
 
       {/* Account List */}
-      <div className="space-y-3">
-        {accounts.map((account) => (
-          <div
-            key={account.id}
-            className="p-4 bg-gray-50 dark:bg-gray-900/50 hover:bg-gray-100 dark:hover:bg-gray-800/50 rounded-xl transition cursor-pointer border border-transparent dark:border-gray-800"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-white dark:bg-gray-800 rounded-lg flex items-center justify-center text-2xl border border-gray-200 dark:border-gray-700">
-                  {account.icon}
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900 dark:text-white">{account.name}</p>
-                  <div className="flex items-center gap-2 mt-1">
-                    <p className="text-sm text-gray-600 dark:text-gray-400">{account.type}</p>
-                    <span className="text-xs text-gray-400 dark:text-gray-600">•</span>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">{account.accountNumber}</p>
+      {accounts.length === 0 ? (
+        <p className="text-sm text-gray-500 mb-4">No accounts added yet.</p>
+      ) : (
+        <div className="space-y-3">
+          {accounts.map((account) => (
+            <div
+              key={account.id}
+              className="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-transparent dark:border-gray-800"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-white dark:bg-gray-800 rounded-lg flex items-center justify-center text-2xl border border-gray-200 dark:border-gray-700">
+                    {account.icon || '🏦'}
+                  </div>
+                  <div>
+                    <p className="font-semibold text-gray-900 dark:text-white">{account.provider_name}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">{account.account_type}</p>
                   </div>
                 </div>
-              </div>
-
-              <div className="text-right">
-                <p className="text-xl font-bold text-gray-900 dark:text-white" style={{ color: 'var(--kp-green-mid)' }}>
-                  {showBalances ? `RWF ${account.balance.toLocaleString()}` : '••••••'}
-                </p>
-                <div className={`flex items-center justify-end gap-1 text-sm mt-1 ${
-                  account.change >= 0
-                    ? 'text-green-600 dark:text-green-400'
-                    : 'text-red-600 dark:text-red-400'
-                }`}>
-                  {account.change >= 0 ? (
-                    <TrendingUp className="w-3 h-3" />
-                  ) : (
-                    <TrendingDown className="w-3 h-3" />
-                  )}
-                  {account.change >= 0 ? '+' : ''}RWF {Math.abs(account.change).toLocaleString()}
+                <div className="text-right">
+                  <p className="text-xl font-bold" style={{ color: 'var(--kp-green-mid)' }}>
+                    {showBalances ? `RWF ${Number(account.balance).toLocaleString()}` : '••••••'}
+                  </p>
                 </div>
               </div>
             </div>
+          ))}
+        </div>
+      )}
+
+      {showAdd ? (
+        <div className="mt-4 p-4 border border-gray-200 dark:border-gray-800 rounded-lg space-y-3">
+          <input
+            type="text"
+            placeholder="Provider name (e.g. Bank of Kigali, MTN Mobile Money)"
+            value={providerName}
+            onChange={(e) => setProviderName(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="text"
+            placeholder="Account type (e.g. Savings, Mobile Wallet)"
+            value={accountType}
+            onChange={(e) => setAccountType(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="number"
+            placeholder="Current balance (RWF)"
+            value={balance}
+            onChange={(e) => setBalance(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <div className="flex gap-2">
+            <button onClick={handleAddAccount} className="flex-1 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition">
+              Save
+            </button>
+            <button onClick={() => setShowAdd(false)} className="flex-1 py-2 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+              Cancel
+            </button>
           </div>
-        ))}
-      </div>
+        </div>
+      ) : (
+        <button
+          onClick={() => setShowAdd(true)}
+          className="w-full mt-4 py-3 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg text-gray-600 dark:text-gray-400 hover:border-lime-500 hover:text-lime-600 transition flex items-center justify-center gap-2"
+        >
+          <Plus className="w-4 h-4" />
+          Add Account
+        </button>
+      )}
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-gray-200 dark:border-gray-800">
+      <div className="grid grid-cols-2 gap-4 mt-6 pt-6 border-t border-gray-200 dark:border-gray-800">
         <div className="text-center">
           <p className="text-2xl font-bold text-gray-900 dark:text-lime-400">{accounts.length}</p>
           <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Total Accounts</p>
         </div>
         <div className="text-center">
           <p className="text-2xl font-bold text-green-600 dark:text-green-400">
-            {accounts.filter(a => a.change > 0).length}
+            {accounts.filter((a) => Number(a.last_change) > 0).length}
           </p>
           <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Growing</p>
-        </div>
-        <div className="text-center">
-          <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">3</p>
-          <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Linked Banks</p>
         </div>
       </div>
     </div>

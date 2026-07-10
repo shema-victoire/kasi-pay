@@ -1,107 +1,131 @@
-import { useState } from 'react';
-import { BookOpen, Award, Play, CheckCircle, Lock, TrendingUp, Shield, Target, Brain } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { BookOpen, Award, Play, CheckCircle, TrendingUp, Shield, Target, Brain } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { supabase } from '../lib/supabaseClient';
+
+const MODULE_DEFS = [
+  { id: 'budgeting-basics', title: 'Budgeting Basics', description: 'Learn how to create and stick to a monthly budget', icon: Target, duration: '15 min', level: 'Beginner', lessons: 4, color: 'blue' },
+  { id: 'understanding-credit', title: 'Understanding Credit', description: 'How credit scores work and how to build credit', icon: TrendingUp, duration: '20 min', level: 'Beginner', lessons: 5, color: 'purple' },
+  { id: 'smart-saving', title: 'Smart Saving Strategies', description: 'Effective techniques to grow your savings', icon: Award, duration: '18 min', level: 'Intermediate', lessons: 6, color: 'green' },
+  { id: 'fraud-prevention', title: 'Fraud Prevention', description: 'Protect yourself from financial scams and fraud', icon: Shield, duration: '12 min', level: 'Beginner', lessons: 3, color: 'red' },
+  { id: 'msme-finance', title: 'Business Finance for MSMEs', description: 'Managing finances for small businesses', icon: Brain, duration: '25 min', level: 'Advanced', lessons: 7, color: 'orange' },
+  { id: 'investment-basics', title: 'Investment Basics', description: 'Introduction to growing wealth through investments', icon: TrendingUp, duration: '22 min', level: 'Advanced', lessons: 6, color: 'indigo' },
+];
+
+const QUIZ_QUESTIONS = [
+  { question: 'What percentage of your income should ideally go to savings?', options: ['5-10%', '15-20%', '30-40%', '50%'], correct: 1 },
+  { question: 'Which factor has the biggest impact on your credit score?', options: ['Payment history', 'Credit utilization', 'Length of credit history', 'Types of credit'], correct: 0 },
+];
+
+const LANGUAGES = [
+  { code: 'en', label: 'English' },
+  { code: 'rw', label: 'Kinyarwanda' },
+  { code: 'fr', label: 'Français' },
+  { code: 'sw', label: 'Swahili' },
+];
+
+interface ProgressRow {
+  module_id: string;
+  completed: boolean;
+  quiz_score: number | null;
+}
 
 export function Learn() {
-  const [selectedModule, setSelectedModule] = useState<number | null>(null);
+  const { user, profile, refreshProfile } = useAuth();
+  const [selectedModule, setSelectedModule] = useState<string | null>(null);
+  const [progress, setProgress] = useState<Record<string, ProgressRow>>({});
+  const [loading, setLoading] = useState(true);
+  const [language, setLanguage] = useState('en');
 
-  const modules = [
-    {
-      id: 1,
-      title: 'Budgeting Basics',
-      description: 'Learn how to create and stick to a monthly budget',
-      icon: Target,
-      duration: '15 min',
-      level: 'Beginner',
-      completed: true,
-      progress: 100,
-      lessons: 4,
-      color: 'blue'
-    },
-    {
-      id: 2,
-      title: 'Understanding Credit',
-      description: 'How credit scores work and how to build credit',
-      icon: TrendingUp,
-      duration: '20 min',
-      level: 'Beginner',
-      completed: true,
-      progress: 100,
-      lessons: 5,
-      color: 'purple'
-    },
-    {
-      id: 3,
-      title: 'Smart Saving Strategies',
-      description: 'Effective techniques to grow your savings',
-      icon: Award,
-      duration: '18 min',
-      level: 'Intermediate',
-      completed: false,
-      progress: 60,
-      lessons: 6,
-      color: 'green'
-    },
-    {
-      id: 4,
-      title: 'Fraud Prevention',
-      description: 'Protect yourself from financial scams and fraud',
-      icon: Shield,
-      duration: '12 min',
-      level: 'Beginner',
-      completed: false,
-      progress: 25,
-      lessons: 3,
-      color: 'red'
-    },
-    {
-      id: 5,
-      title: 'Business Finance for MSMEs',
-      description: 'Managing finances for small businesses',
-      icon: Brain,
-      duration: '25 min',
-      level: 'Advanced',
-      completed: false,
-      progress: 0,
-      lessons: 7,
-      color: 'orange'
-    },
-    {
-      id: 6,
-      title: 'Investment Basics',
-      description: 'Introduction to growing wealth through investments',
-      icon: TrendingUp,
-      duration: '22 min',
-      level: 'Advanced',
-      completed: false,
-      progress: 0,
-      lessons: 6,
-      color: 'indigo'
-    },
-  ];
+  const [showQuiz, setShowQuiz] = useState(false);
+  const [quizStep, setQuizStep] = useState(0);
+  const [quizCorrect, setQuizCorrect] = useState(0);
+  const [quizDone, setQuizDone] = useState(false);
+
+  const loadProgress = useCallback(async () => {
+    if (!user) return;
+    setLoading(true);
+    const { data } = await supabase.from('learn_progress').select('module_id, completed, quiz_score').eq('user_id', user.id);
+    const map: Record<string, ProgressRow> = {};
+    (data ?? []).forEach((row: any) => { map[row.module_id] = row; });
+    setProgress(map);
+    setLoading(false);
+  }, [user]);
+
+  useEffect(() => {
+    loadProgress();
+    if (profile?.language) setLanguage(profile.language);
+  }, [loadProgress, profile]);
+
+  const modules = MODULE_DEFS.map((m) => ({
+    ...m,
+    completed: progress[m.id]?.completed ?? false,
+  }));
+
+  const totalCompleted = modules.filter((m) => m.completed).length;
+  const completionRate = (totalCompleted / modules.length) * 100;
+  const quizScore = progress['daily-quiz']?.quiz_score ?? null;
 
   const achievements = [
-    { id: 1, name: 'First Steps', description: 'Complete your first module', earned: true, icon: '🎯' },
-    { id: 2, name: 'Budget Master', description: 'Complete Budgeting Basics', earned: true, icon: '💰' },
-    { id: 3, name: 'Credit Champion', description: 'Complete Understanding Credit', earned: true, icon: '⭐' },
-    { id: 4, name: 'Learning Streak', description: '7 days in a row', earned: false, icon: '🔥' },
-    { id: 5, name: 'All Rounder', description: 'Complete all modules', earned: false, icon: '🏆' },
+    { id: 1, name: 'First Steps', description: 'Complete your first module', earned: totalCompleted >= 1, icon: '🎯' },
+    { id: 2, name: 'Budget Master', description: 'Complete Budgeting Basics', earned: progress['budgeting-basics']?.completed ?? false, icon: '💰' },
+    { id: 3, name: 'Credit Champion', description: 'Complete Understanding Credit', earned: progress['understanding-credit']?.completed ?? false, icon: '⭐' },
+    { id: 4, name: 'Quiz Taker', description: 'Complete the daily quiz', earned: quizScore !== null, icon: '🧠' },
+    { id: 5, name: 'All Rounder', description: 'Complete all modules', earned: totalCompleted === modules.length, icon: '🏆' },
   ];
 
-  const quizQuestions = [
-    {
-      question: 'What percentage of your income should ideally go to savings?',
-      options: ['5-10%', '15-20%', '30-40%', '50%'],
-      correct: 1
-    },
-    {
-      question: 'Which factor has the biggest impact on your credit score?',
-      options: ['Payment history', 'Credit utilization', 'Length of credit history', 'Types of credit'],
-      correct: 0
+  const markComplete = async (moduleId: string) => {
+    if (!user) return;
+    await supabase.from('learn_progress').upsert(
+      { user_id: user.id, module_id: moduleId, language, completed: true, updated_at: new Date().toISOString() },
+      { onConflict: 'user_id,module_id' }
+    );
+    await loadProgress();
+    setSelectedModule(null);
+  };
+
+  const handleLanguageChange = async (code: string) => {
+    setLanguage(code);
+    if (user) {
+      await supabase.from('profiles').update({ language: code }).eq('id', user.id);
+      await refreshProfile();
     }
-  ];
+  };
 
-  const totalCompleted = modules.filter(m => m.completed).length;
-  const completionRate = (totalCompleted / modules.length) * 100;
+  const handleQuizAnswer = (optionIndex: number) => {
+    const isCorrect = optionIndex === QUIZ_QUESTIONS[quizStep].correct;
+    const nextCorrect = quizCorrect + (isCorrect ? 1 : 0);
+    setQuizCorrect(nextCorrect);
+
+    if (quizStep + 1 < QUIZ_QUESTIONS.length) {
+      setQuizStep(quizStep + 1);
+    } else {
+      setQuizDone(true);
+      const finalScore = Math.round((nextCorrect / QUIZ_QUESTIONS.length) * 100);
+      if (user) {
+        supabase
+          .from('learn_progress')
+          .upsert(
+            { user_id: user.id, module_id: 'daily-quiz', language, completed: true, quiz_score: finalScore, updated_at: new Date().toISOString() },
+            { onConflict: 'user_id,module_id' }
+          )
+          .then(() => loadProgress());
+      }
+    }
+  };
+
+  const closeQuiz = () => {
+    setShowQuiz(false);
+    setQuizStep(0);
+    setQuizCorrect(0);
+    setQuizDone(false);
+  };
+
+  if (loading) {
+    return <div className="text-center py-20 text-gray-500">Loading your progress…</div>;
+  }
+
+  const selected = modules.find((m) => m.id === selectedModule);
 
   return (
     <div className="space-y-6">
@@ -125,22 +149,19 @@ export function Learn() {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-              <p className="text-sm text-blue-100 mb-1">Total Time</p>
-              <p className="text-2xl font-bold">2.5 hrs</p>
+              <p className="text-sm text-blue-100 mb-1">Quiz Score</p>
+              <p className="text-2xl font-bold">{quizScore !== null ? `${quizScore}%` : '—'}</p>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
               <p className="text-sm text-blue-100 mb-1">Achievements</p>
-              <p className="text-2xl font-bold">{achievements.filter(a => a.earned).length}/{achievements.length}</p>
+              <p className="text-2xl font-bold">{achievements.filter((a) => a.earned).length}/{achievements.length}</p>
             </div>
           </div>
         </div>
 
         <div className="mt-6">
           <div className="h-3 bg-white/20 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-white"
-              style={{ width: `${completionRate}%` }}
-            />
+            <div className="h-full bg-white" style={{ width: `${completionRate}%` }} />
           </div>
         </div>
       </div>
@@ -173,13 +194,9 @@ export function Learn() {
                         <h4 className="font-semibold text-gray-900 mb-1">{module.title}</h4>
                         <p className="text-sm text-gray-600">{module.description}</p>
                       </div>
-                      {module.progress === 0 ? (
-                        <Lock className="w-5 h-5 text-gray-400" />
-                      ) : (
-                        <button className="p-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition">
-                          <Play className="w-4 h-4" />
-                        </button>
-                      )}
+                      <button className="p-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition">
+                        <Play className="w-4 h-4" />
+                      </button>
                     </div>
 
                     <div className="flex items-center gap-4 text-xs text-gray-500 mb-3">
@@ -189,30 +206,14 @@ export function Learn() {
                       </span>
                       <span>⏱️ {module.duration}</span>
                       <span className={`px-2 py-1 rounded-full ${
-                        module.level === 'Beginner'
-                          ? 'bg-green-100 text-green-700'
-                          : module.level === 'Intermediate'
-                          ? 'bg-yellow-100 text-yellow-700'
-                          : 'bg-red-100 text-red-700'
+                        module.level === 'Beginner' ? 'bg-green-100 text-green-700' : module.level === 'Intermediate' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'
                       }`}>
                         {module.level}
                       </span>
+                      <span className={`px-2 py-1 rounded-full ${module.completed ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
+                        {module.completed ? 'Completed' : 'Not started'}
+                      </span>
                     </div>
-
-                    {module.progress > 0 && (
-                      <div>
-                        <div className="flex items-center justify-between text-xs text-gray-600 mb-1">
-                          <span>Progress</span>
-                          <span>{module.progress}%</span>
-                        </div>
-                        <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                          <div
-                            className={`h-full bg-${module.color}-500`}
-                            style={{ width: `${module.progress}%` }}
-                          />
-                        </div>
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>
@@ -233,17 +234,13 @@ export function Learn() {
                 <div
                   key={achievement.id}
                   className={`p-3 rounded-lg border ${
-                    achievement.earned
-                      ? 'bg-gradient-to-br from-yellow-50 to-orange-50 border-yellow-200'
-                      : 'bg-gray-50 border-gray-200 opacity-60'
+                    achievement.earned ? 'bg-gradient-to-br from-yellow-50 to-orange-50 border-yellow-200' : 'bg-gray-50 border-gray-200 opacity-60'
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <div className="text-2xl">{achievement.icon}</div>
                     <div>
-                      <p className={`font-medium text-sm ${achievement.earned ? 'text-gray-900' : 'text-gray-600'}`}>
-                        {achievement.name}
-                      </p>
+                      <p className={`font-medium text-sm ${achievement.earned ? 'text-gray-900' : 'text-gray-600'}`}>{achievement.name}</p>
                       <p className="text-xs text-gray-500">{achievement.description}</p>
                     </div>
                   </div>
@@ -258,8 +255,13 @@ export function Learn() {
               <Brain className="w-5 h-5 text-purple-600" />
               Daily Quiz
             </h3>
-            <p className="text-sm text-gray-600 mb-4">Test your knowledge and earn points!</p>
-            <button className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-medium hover:shadow-lg transition">
+            <p className="text-sm text-gray-600 mb-4">
+              {quizScore !== null ? `Last score: ${quizScore}% — try again to improve` : 'Test your knowledge and earn points!'}
+            </p>
+            <button
+              onClick={() => setShowQuiz(true)}
+              className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-medium hover:shadow-lg transition"
+            >
               Start Quiz
             </button>
           </div>
@@ -268,56 +270,40 @@ export function Learn() {
           <div className="bg-white rounded-xl border border-gray-200 p-6">
             <h3 className="font-semibold text-gray-900 mb-3">💡 Study Tips</h3>
             <ul className="space-y-2 text-sm text-gray-700">
-              <li className="flex gap-2">
-                <span>•</span>
-                <span>Complete one module per week</span>
-              </li>
-              <li className="flex gap-2">
-                <span>•</span>
-                <span>Apply what you learn immediately</span>
-              </li>
-              <li className="flex gap-2">
-                <span>•</span>
-                <span>Review modules to reinforce knowledge</span>
-              </li>
-              <li className="flex gap-2">
-                <span>•</span>
-                <span>Share learnings with family and friends</span>
-              </li>
+              <li className="flex gap-2"><span>•</span><span>Complete one module per week</span></li>
+              <li className="flex gap-2"><span>•</span><span>Apply what you learn immediately</span></li>
+              <li className="flex gap-2"><span>•</span><span>Review modules to reinforce knowledge</span></li>
+              <li className="flex gap-2"><span>•</span><span>Share learnings with family and friends</span></li>
             </ul>
           </div>
 
           {/* Language Selector */}
           <div className="bg-white rounded-xl border border-gray-200 p-6">
             <h3 className="font-semibold text-gray-900 mb-3">🌍 Language</h3>
-            <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none">
-              <option>English</option>
-              <option>Kinyarwanda</option>
-              <option>Français</option>
-              <option>Swahili</option>
+            <select
+              value={language}
+              onChange={(e) => handleLanguageChange(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+            >
+              {LANGUAGES.map((l) => (
+                <option key={l.code} value={l.code}>{l.label}</option>
+              ))}
             </select>
-            <p className="text-xs text-gray-500 mt-2">All modules are available in your preferred language</p>
+            <p className="text-xs text-gray-500 mt-2">Saved to your profile — synced with your account settings</p>
           </div>
         </div>
       </div>
 
       {/* Module Detail Modal */}
-      {selectedModule && (
+      {selected && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setSelectedModule(null)}>
           <div className="bg-white rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-start justify-between mb-6">
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                  {modules.find(m => m.id === selectedModule)?.title}
-                </h3>
-                <p className="text-gray-600">{modules.find(m => m.id === selectedModule)?.description}</p>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">{selected.title}</h3>
+                <p className="text-gray-600">{selected.description}</p>
               </div>
-              <button
-                onClick={() => setSelectedModule(null)}
-                className="text-gray-400 hover:text-gray-600 text-2xl"
-              >
-                ×
-              </button>
+              <button onClick={() => setSelectedModule(null)} className="text-gray-400 hover:text-gray-600 text-2xl">×</button>
             </div>
 
             <div className="space-y-4 mb-6">
@@ -333,24 +319,72 @@ export function Learn() {
 
               <div className="grid grid-cols-3 gap-3 text-center">
                 <div className="p-3 bg-gray-50 rounded-lg">
-                  <p className="text-2xl font-bold text-blue-600">{modules.find(m => m.id === selectedModule)?.lessons}</p>
+                  <p className="text-2xl font-bold text-blue-600">{selected.lessons}</p>
                   <p className="text-xs text-gray-600">Lessons</p>
                 </div>
                 <div className="p-3 bg-gray-50 rounded-lg">
-                  <p className="text-2xl font-bold text-purple-600">{modules.find(m => m.id === selectedModule)?.duration}</p>
+                  <p className="text-2xl font-bold text-purple-600">{selected.duration}</p>
                   <p className="text-xs text-gray-600">Duration</p>
                 </div>
                 <div className="p-3 bg-gray-50 rounded-lg">
-                  <p className="text-2xl font-bold text-green-600">{modules.find(m => m.id === selectedModule)?.level}</p>
+                  <p className="text-2xl font-bold text-green-600">{selected.level}</p>
                   <p className="text-xs text-gray-600">Level</p>
                 </div>
               </div>
             </div>
 
-            <button className="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:shadow-lg transition flex items-center justify-center gap-2">
+            <button
+              onClick={() => markComplete(selected.id)}
+              className="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:shadow-lg transition flex items-center justify-center gap-2"
+            >
               <Play className="w-5 h-5" />
-              {modules.find(m => m.id === selectedModule)?.progress === 0 ? 'Start Module' : 'Continue Learning'}
+              {selected.completed ? 'Mark as Reviewed' : 'Complete Module'}
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Quiz Modal */}
+      {showQuiz && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={closeQuiz}>
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
+            {!quizDone ? (
+              <>
+                <h3 className="text-xl font-bold text-gray-900 mb-4">
+                  Question {quizStep + 1} of {QUIZ_QUESTIONS.length}
+                </h3>
+                <p className="text-gray-700 mb-6">{QUIZ_QUESTIONS[quizStep].question}</p>
+                <div className="space-y-2">
+                  {QUIZ_QUESTIONS[quizStep].options.map((option, i) => (
+                    <button
+                      key={i}
+                      onClick={() => handleQuizAnswer(i)}
+                      className="w-full text-left px-4 py-3 border border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition"
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="text-center">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <CheckCircle className="w-8 h-8 text-green-600" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                  {Math.round((quizCorrect / QUIZ_QUESTIONS.length) * 100)}%
+                </h3>
+                <p className="text-gray-600 mb-6">
+                  You got {quizCorrect} of {QUIZ_QUESTIONS.length} correct — saved to your profile
+                </p>
+                <button
+                  onClick={closeQuiz}
+                  className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-semibold hover:shadow-lg transition"
+                >
+                  Done
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

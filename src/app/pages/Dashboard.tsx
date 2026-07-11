@@ -122,7 +122,7 @@ export function Dashboard() {
 
       {/* Quick Actions */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Link to="/payment" className="bg-white dark:bg-[#1a1a1a] rounded-xl p-6 border border-gray-200 dark:border-gray-800 hover:shadow-lg kp-hover-lift transition group">
+        <Link to="/app/payment" className="bg-white dark:bg-[#1a1a1a] rounded-xl p-6 border border-gray-200 dark:border-gray-800 hover:shadow-lg kp-hover-lift transition group">
           <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition kp-gradient-subtle">
             <ArrowUpRight className="w-6 h-6 text-white" />
           </div>
@@ -130,7 +130,7 @@ export function Dashboard() {
           <p className="text-sm text-gray-500 dark:text-gray-400">Quick transfer</p>
         </Link>
 
-        <Link to="/credit" className="bg-white dark:bg-[#1a1a1a] rounded-xl p-6 border border-gray-200 dark:border-gray-800 hover:shadow-lg kp-hover-lift transition group">
+        <Link to="/app/credit" className="bg-white dark:bg-[#1a1a1a] rounded-xl p-6 border border-gray-200 dark:border-gray-800 hover:shadow-lg kp-hover-lift transition group">
           <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition kp-gradient-subtle">
             <CreditCard className="w-6 h-6 text-white" />
           </div>
@@ -138,7 +138,7 @@ export function Dashboard() {
           <p className="text-sm text-gray-500 dark:text-gray-400">Apply for loan</p>
         </Link>
 
-        <Link to="/manage" className="bg-white dark:bg-[#1a1a1a] rounded-xl p-6 border border-gray-200 dark:border-gray-800 hover:shadow-lg kp-hover-lift transition group">
+        <Link to="/app/manage" className="bg-white dark:bg-[#1a1a1a] rounded-xl p-6 border border-gray-200 dark:border-gray-800 hover:shadow-lg kp-hover-lift transition group">
           <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition kp-gradient-subtle">
             <Target className="w-6 h-6 text-white" />
           </div>
@@ -146,7 +146,7 @@ export function Dashboard() {
           <p className="text-sm text-gray-500 dark:text-gray-400">Budget & savings</p>
         </Link>
 
-        <Link to="/learn" className="bg-white dark:bg-[#1a1a1a] rounded-xl p-6 border border-gray-200 dark:border-gray-800 hover:shadow-lg kp-hover-lift transition group">
+        <Link to="/app/learn" className="bg-white dark:bg-[#1a1a1a] rounded-xl p-6 border border-gray-200 dark:border-gray-800 hover:shadow-lg kp-hover-lift transition group">
           <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition kp-gradient-subtle">
             <Award className="w-6 h-6 text-white" />
           </div>
@@ -160,7 +160,7 @@ export function Dashboard() {
         <div className="bg-white dark:bg-[#1a1a1a] rounded-xl border border-gray-200 dark:border-gray-800 p-6">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Transactions</h3>
-            <Link to="/manage" className="text-sm flex items-center gap-1 transition-colors" style={{ color: 'var(--kp-green-mid)' }}>
+            <Link to="/app/manage" className="text-sm flex items-center gap-1 transition-colors" style={{ color: 'var(--kp-green-mid)' }}>
               View all
               <ChevronRight className="w-4 h-4" />
             </Link>
@@ -207,7 +207,7 @@ export function Dashboard() {
         <div className="bg-white dark:bg-[#1a1a1a] rounded-xl border border-gray-200 dark:border-gray-800 p-6">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Savings Goals</h3>
-            <Link to="/manage" className="text-sm flex items-center gap-1 transition-colors" style={{ color: 'var(--kp-green-mid)' }}>
+            <Link to="/app/manage" className="text-sm flex items-center gap-1 transition-colors" style={{ color: 'var(--kp-green-mid)' }}>
               Manage
               <ChevronRight className="w-4 h-4" />
             </Link>
@@ -239,7 +239,7 @@ export function Dashboard() {
           )}
 
           <Link
-            to="/manage"
+            to="/app/manage"
             className="w-full mt-6 py-3 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg text-gray-600 dark:text-gray-400 hover:border-lime-500 dark:hover:border-lime-400 hover:text-lime-600 dark:hover:text-lime-400 transition flex items-center justify-center"
           >
             + Create New Goal

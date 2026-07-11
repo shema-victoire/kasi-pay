@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { AppLayout } from './components/AppLayout';
+import { Landing } from './pages/Landing';
 import { Auth } from './pages/Auth';
 import { Dashboard } from './pages/Dashboard';
 import { Payment } from './pages/Payment';
@@ -33,12 +34,13 @@ function AppRoutes() {
 
   return (
     <Routes>
+      <Route path="/" element={<Landing />} />
       <Route
         path="/auth"
-        element={!loading && session ? <Navigate to="/" replace /> : <Auth />}
+        element={!loading && session ? <Navigate to="/app" replace /> : <Auth />}
       />
       <Route
-        path="/"
+        path="/app"
         element={
           <RequireAuth>
             <AppLayout />
@@ -51,8 +53,8 @@ function AppRoutes() {
         <Route path="manage" element={<Manage />} />
         <Route path="learn" element={<Learn />} />
         <Route path="profile" element={<Profile />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }

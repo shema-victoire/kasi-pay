@@ -8,11 +8,11 @@ export function AppLayout() {
   const { theme, toggleTheme } = useTheme();
 
   const navItems = [
-    { to: '/', icon: Home, label: 'Dashboard' },
-    { to: '/payment', icon: Send, label: 'Payment' },
-    { to: '/credit', icon: CreditCard, label: 'Credit' },
-    { to: '/manage', icon: PieChart, label: 'Manage' },
-    { to: '/learn', icon: BookOpen, label: 'Learn' },
+    { to: '/app', icon: Home, label: 'Dashboard' },
+    { to: '/app/payment', icon: Send, label: 'Payment' },
+    { to: '/app/credit', icon: CreditCard, label: 'Credit' },
+    { to: '/app/manage', icon: PieChart, label: 'Manage' },
+    { to: '/app/learn', icon: BookOpen, label: 'Learn' },
   ];
 
   return (
@@ -38,7 +38,7 @@ export function AppLayout() {
                 <NavLink
                   key={item.to}
                   to={item.to}
-                  end={item.to === '/'}
+                  end={item.to === '/app'}
                   style={(({ isActive }) => ({
                     backgroundColor: isActive
                       ? 'rgba(127, 184, 148, 0.1)'
@@ -74,7 +74,7 @@ export function AppLayout() {
                 <span className="absolute top-1 right-1 w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--kp-green-mid)' }}></span>
               </button>
               <NavLink
-                to="/profile"
+                to="/app/profile"
                 style={(({ isActive }) => ({
                   backgroundColor: isActive
                     ? 'rgba(127, 184, 148, 0.1)'
@@ -109,7 +109,7 @@ export function AppLayout() {
                 <NavLink
                   key={item.to}
                   to={item.to}
-                  end={item.to === '/'}
+                  end={item.to === '/app'}
                   onClick={() => setMobileMenuOpen(false)}
                   className={({ isActive }) =>
                     `flex items-center gap-3 px-4 py-3 rounded-lg transition ${

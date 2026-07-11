@@ -256,7 +256,7 @@ export function Learn() {
               Daily Quiz
             </h3>
             <p className="text-sm text-gray-600 mb-4">
-              {quizScore !== null ? `Last score: ${quizScore}% — try again to improve` : 'Test your knowledge and earn points!'}
+              {quizScore !== null ? `Last score: ${quizScore}%. Try again to improve` : 'Test your knowledge and earn points!'}
             </p>
             <button
               onClick={() => setShowQuiz(true)}
@@ -289,7 +289,7 @@ export function Learn() {
                 <option key={l.code} value={l.code}>{l.label}</option>
               ))}
             </select>
-            <p className="text-xs text-gray-500 mt-2">Saved to your profile — synced with your account settings</p>
+            <p className="text-xs text-gray-500 mt-2">Saved to your profile and synced with your account settings</p>
           </div>
         </div>
       </div>
@@ -375,7 +375,7 @@ export function Learn() {
                   {Math.round((quizCorrect / QUIZ_QUESTIONS.length) * 100)}%
                 </h3>
                 <p className="text-gray-600 mb-6">
-                  You got {quizCorrect} of {QUIZ_QUESTIONS.length} correct — saved to your profile
+                  You got {quizCorrect} of {QUIZ_QUESTIONS.length} correct. Saved to your profile
                 </p>
                 <button
                   onClick={closeQuiz}

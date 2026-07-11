@@ -136,7 +136,7 @@ export function Credit() {
       <div>
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Alternative Credit Services</h1>
         <p className="text-gray-600">
-          Real score, calculated from your actual activity. Loans below are sandbox — no real funds disbursed.
+          Real score, calculated from your actual activity. Loans below are in sandbox mode, no real funds disbursed.
         </p>
       </div>
 
@@ -152,7 +152,7 @@ export function Credit() {
               <h2 className="text-6xl font-bold">{score}</h2>
             </div>
             <p className="text-purple-100 mt-2">
-              {score >= 700 ? 'Excellent — you qualify for our best rates' : score >= 500 ? 'Good — building your credit profile' : 'Getting started — use the app more to build your score'}
+              {score >= 700 ? 'Excellent. You qualify for our best rates' : score >= 500 ? 'Good. Building your credit profile' : 'Getting started. Use the app more to build your score'}
             </p>
           </div>
 
@@ -263,7 +263,7 @@ export function Credit() {
               </button>
 
               <p className="text-xs text-gray-500 text-center">
-                💡 This records a real, simulated loan in sandbox mode — no funds are actually disbursed.
+                💡 This records a real, simulated loan in sandbox mode. No funds are actually disbursed.
               </p>
             </div>
           </div>
@@ -297,7 +297,7 @@ export function Credit() {
             <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
               <p className="text-sm text-green-800">
                 <strong>💡 Improve your score:</strong> Log more expenses and payments in Manage/Payment,
-                set budgets and savings goals, and keep using the app over time — every real factor above
+                set budgets and savings goals, and keep using the app over time. Every real factor above
                 is recalculated from your actual activity.
               </p>
             </div>
@@ -388,7 +388,7 @@ export function Credit() {
                 <CheckCircle className="w-8 h-8 text-green-600" />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-2">Application Recorded</h3>
-              <p className="text-gray-600">Sandbox loan saved to your account — no real funds disbursed</p>
+              <p className="text-gray-600">Sandbox loan saved to your account. No real funds disbursed</p>
             </div>
 
             <div className="bg-gray-50 rounded-lg p-4 mb-6">

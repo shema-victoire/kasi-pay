@@ -48,7 +48,7 @@ export function Payment() {
       <div>
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Payment Initiation</h1>
         <p className="text-gray-600">
-          Send money across multiple channels — sandbox mode, no real funds move yet
+          Send money across multiple channels. Sandbox mode, no real funds move yet
         </p>
       </div>
 
@@ -102,7 +102,7 @@ export function Payment() {
         {loading ? (
           <p className="text-sm text-gray-500">Loading…</p>
         ) : history.length === 0 ? (
-          <p className="text-sm text-gray-500">No payments recorded yet — try one above.</p>
+          <p className="text-sm text-gray-500">No payments recorded yet. Try one above.</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">

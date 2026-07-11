@@ -245,7 +245,7 @@ export function Manage() {
               <div>
                 <h3 className="font-semibold text-gray-900 mb-4">Budget Categories</h3>
                 {budgets.length === 0 && (
-                  <p className="text-sm text-gray-500 mb-4">No budget categories yet — add your first one below.</p>
+                  <p className="text-sm text-gray-500 mb-4">No budget categories yet. Add your first one below.</p>
                 )}
                 <div className="space-y-4">
                   {budgets.map((item) => {
@@ -333,7 +333,7 @@ export function Manage() {
                     </PieChart>
                   </ResponsiveContainer>
                 ) : (
-                  <p className="text-sm text-gray-500">No spending recorded yet — add an expense to see your breakdown.</p>
+                  <p className="text-sm text-gray-500">No spending recorded yet. Add an expense to see your breakdown.</p>
                 )}
               </div>
             </div>

@@ -33,7 +33,7 @@ export function Auth() {
             {mode === 'signin' ? 'Sign in to your account' : 'Create your account'}
           </p>
           <p className="text-xs mt-2 px-3 py-1 inline-block bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400 rounded-full border border-yellow-200 dark:border-yellow-800">
-            Sandbox mode — no real money moves here
+            Sandbox mode: no real money moves here
           </p>
         </div>
 

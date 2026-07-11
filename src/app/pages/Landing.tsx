@@ -18,7 +18,7 @@ export function Landing() {
           </div>
           <div className="flex items-center gap-3">
             <span className="hidden sm:inline text-xs px-3 py-1 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400 rounded-full border border-yellow-200 dark:border-yellow-800">
-              Sandbox — no real money moves
+              Sandbox: no real money moves
             </span>
             <Link to="/auth" className="px-4 py-2 text-sm font-medium rounded-lg border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-900 transition">
               Sign In
@@ -34,7 +34,7 @@ export function Landing() {
             From financial access to real financial health
           </h1>
           <p className="text-lg text-white/90 max-w-2xl mx-auto mb-10">
-            Rwanda has reached 96% financial inclusion — but access hasn't translated into credit and resilience.
+            Rwanda has reached 96% financial inclusion, but access hasn't translated into credit and resilience.
             KASI PAY / INSTAPAY combines payments, alternative credit, budgeting, and financial literacy in one platform.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -60,7 +60,7 @@ export function Landing() {
         <div className="bg-white dark:bg-[#1a1a1a] rounded-2xl border border-gray-200 dark:border-gray-800 shadow-lg p-8 grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
           <div>
             <p className="text-4xl font-bold" style={{ color: 'var(--kp-green-mid)' }}>96%</p>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Financial inclusion in Rwanda — 7.8 million adults</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Financial inclusion in Rwanda (7.8 million adults)</p>
           </div>
           <div>
             <p className="text-4xl font-bold" style={{ color: 'var(--kp-green-mid)' }}>86%</p>
@@ -68,7 +68,7 @@ export function Landing() {
           </div>
           <div>
             <p className="text-4xl font-bold" style={{ color: 'var(--kp-green-mid)' }}>99.8%</p>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Of Rwandan businesses are MSMEs — most still credit-invisible</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Of Rwandan businesses are MSMEs, most still credit-invisible</p>
           </div>
         </div>
       </section>
@@ -77,7 +77,7 @@ export function Landing() {
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">One platform, four real tools</h2>
-          <p className="text-gray-600 dark:text-gray-400">Everything below is fully functional — try it yourself after signing up.</p>
+          <p className="text-gray-600 dark:text-gray-400">Everything below is fully functional. Try it yourself after signing up.</p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
@@ -87,7 +87,7 @@ export function Landing() {
             </div>
             <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Payment Initiation</h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              QR code, Mobile Money (MTN &amp; Airtel), and USSD — three ways to pay, all in sandbox mode for now.
+              Three ways to pay: QR code, Mobile Money (MTN &amp; Airtel), and USSD, all in sandbox mode for now.
             </p>
           </div>
 
@@ -97,7 +97,7 @@ export function Landing() {
             </div>
             <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Alternative Credit Score</h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              A real, transparent score built from your actual activity — no traditional credit history required.
+              A real, transparent score built from your actual activity. No traditional credit history required.
             </p>
           </div>
 
@@ -107,7 +107,7 @@ export function Landing() {
             </div>
             <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Personal Finance Management</h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Real budgets, expense tracking, and savings goals — see exactly where your money goes.
+              Real budgets, expense tracking, and savings goals, so you can see exactly where your money goes.
             </p>
           </div>
 
@@ -131,7 +131,7 @@ export function Landing() {
             <div className="text-center">
               <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 kp-gradient-soft text-white font-bold text-lg">1</div>
               <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Create your account</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Sign up in seconds — no paperwork, no branch visit.</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Sign up in seconds. No paperwork, no branch visit.</p>
             </div>
             <div className="text-center">
               <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 kp-gradient-soft text-white font-bold text-lg">2</div>
@@ -153,7 +153,7 @@ export function Landing() {
           <Shield className="w-5 h-5 text-yellow-700 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
           <p className="text-sm text-yellow-800 dark:text-yellow-300">
             <strong>This is a working prototype.</strong> Accounts, budgets, credit scores, and everything you do here is
-            real and saved — but payments and loans are simulated in sandbox mode. No real money moves yet.
+            real and saved, but payments and loans are simulated in sandbox mode. No real money moves yet.
           </p>
         </div>
       </section>
@@ -172,7 +172,7 @@ export function Landing() {
 
       {/* Footer */}
       <footer className="border-t border-gray-200 dark:border-gray-800 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
-        KASI PAY / INSTAPAY — a digital finance concept for Rwanda
+        KASI PAY / INSTAPAY: a digital finance concept for Rwanda
       </footer>
     </div>
   );

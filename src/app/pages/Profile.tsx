@@ -194,7 +194,7 @@ export function Profile() {
                         type="text"
                         defaultValue="Kigali, Rwanda"
                         disabled
-                        title="Location isn't stored yet — coming in a later update"
+                        title="Location isn't stored yet. Coming in a later update"
                         className="flex-1 px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500 outline-none cursor-not-allowed"
                       />
                     </div>

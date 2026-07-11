@@ -85,7 +85,7 @@ export function AccountAggregation() {
             Account Aggregation
           </h3>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-            Your accounts, entered manually — no live bank connection yet
+            Your accounts, entered manually. No live bank connection yet.
           </p>
         </div>
         <button

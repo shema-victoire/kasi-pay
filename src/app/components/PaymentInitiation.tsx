@@ -73,7 +73,7 @@ export function PaymentInitiation({ onPaymentRecorded }: { onPaymentRecorded?: (
         <div className="flex items-center justify-between flex-wrap gap-2">
           <h3 className="text-2xl font-bold text-gray-900 dark:text-lime-400">Payment Initiation</h3>
           <span className="text-xs px-3 py-1 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400 rounded-full border border-yellow-200 dark:border-yellow-800">
-            Sandbox — no real money moves
+            Sandbox: no real money moves
           </span>
         </div>
         <p className="text-gray-600 dark:text-gray-400 mt-2">Choose your preferred payment method</p>
@@ -258,7 +258,7 @@ export function PaymentInitiation({ onPaymentRecorded }: { onPaymentRecorded?: (
           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
           </svg>
-          <span>Sandbox payment — simulated by KASI PAY</span>
+          <span>Simulated sandbox payment by KASI PAY</span>
         </div>
       </div>
     </div>

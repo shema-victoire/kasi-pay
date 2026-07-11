@@ -167,7 +167,7 @@ export function Dashboard() {
           </div>
 
           {transactions.length === 0 ? (
-            <p className="text-sm text-gray-500">No transactions yet — add one from the Manage page.</p>
+            <p className="text-sm text-gray-500">No transactions yet. Add one from the Manage page.</p>
           ) : (
             <div className="space-y-4">
               {transactions.map((transaction) => (

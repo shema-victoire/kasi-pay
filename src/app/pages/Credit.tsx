@@ -154,7 +154,7 @@ export function Credit() {
       </div>
 
       {/* Credit Score Card */}
-      <div className="bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl p-8 text-white">
+      <div className="kp-gradient-primary rounded-2xl p-8 text-white">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div>
             <div className="flex items-center gap-2 mb-2">

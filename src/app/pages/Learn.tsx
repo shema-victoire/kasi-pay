@@ -153,7 +153,7 @@ export function Learn() {
       </div>
 
       {/* Progress Overview */}
-      <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl p-6 md:p-8 text-white">
+      <div className="kp-gradient-primary rounded-2xl p-6 md:p-8 text-white">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div>
             <div className="flex items-center gap-2 mb-2">

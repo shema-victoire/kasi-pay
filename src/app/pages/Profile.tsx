@@ -186,7 +186,7 @@ export function Profile() {
       </div>
 
       {/* Profile Header Card */}
-      <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl p-4 sm:p-8 text-white">
+      <div className="kp-gradient-primary rounded-2xl p-4 sm:p-8 text-white">
         <div className="flex flex-col md:flex-row items-center gap-6">
           <div className="relative">
             <div className="w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-4xl font-bold">

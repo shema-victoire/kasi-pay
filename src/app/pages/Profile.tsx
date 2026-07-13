@@ -419,7 +419,7 @@ export function Profile() {
               ) : (
                 <div className="space-y-4">
                   {linkedAccounts.map((acc) => (
-                    <div key={acc.id} className={`p-4 border-2 rounded-lg ${acc.is_primary ? 'border-green-200 bg-green-50' : 'border-gray-200 dark:border-gray-800'}`}>
+                    <div key={acc.id} className={`p-4 border-2 rounded-lg ${acc.is_primary ? 'border-green-200 dark:border-green-900 bg-green-50 dark:bg-green-950/40' : 'border-gray-200 dark:border-gray-800'}`}>
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <div className="flex items-center gap-3">
                           <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-xl border border-gray-200 dark:border-gray-800">

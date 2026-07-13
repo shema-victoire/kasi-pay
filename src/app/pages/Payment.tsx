@@ -60,7 +60,7 @@ export function Payment() {
 
         {/* Payment Tips */}
         <div className="space-y-4">
-          <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-6 border border-blue-100">
+          <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/40 dark:to-purple-950/40 rounded-xl p-6 border border-blue-100 dark:border-blue-900">
             <h3 className="font-semibold text-gray-900 dark:text-white mb-3">💡 Payment Tips</h3>
             <ul className="space-y-2 text-sm text-gray-700">
               <li className="flex gap-2"><span>•</span><span>Always verify recipient details before sending</span></li>
@@ -122,8 +122,8 @@ export function Payment() {
                   {history.map((payment) => (
                     <tr key={payment.id} className="border-b border-gray-100 hover:bg-gray-50 dark:bg-gray-900">
                       <td className="py-4 px-4">
-                        <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-red-100">
-                          <ArrowUpRight className="w-4 h-4 text-red-600" />
+                        <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-red-100 dark:bg-red-900/50">
+                          <ArrowUpRight className="w-4 h-4 text-red-600 dark:text-red-300" />
                         </div>
                       </td>
                       <td className="py-4 px-4">
@@ -142,7 +142,7 @@ export function Payment() {
                         <span className="text-sm text-gray-600 dark:text-gray-400">{new Date(payment.created_at).toLocaleString()}</span>
                       </td>
                       <td className="py-4 px-4">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-200">
                           {payment.status}
                         </span>
                       </td>
@@ -157,12 +157,12 @@ export function Payment() {
                 <div key={payment.id} className="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-800">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-red-100">
-                        <ArrowUpRight className="w-4 h-4 text-red-600" />
+                      <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-red-100 dark:bg-red-900/50">
+                        <ArrowUpRight className="w-4 h-4 text-red-600 dark:text-red-300" />
                       </div>
                       <span className="font-medium text-gray-900 dark:text-white">{payment.reference ?? '—'}</span>
                     </div>
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-200">
                       {payment.status}
                     </span>
                   </div>

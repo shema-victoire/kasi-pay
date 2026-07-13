@@ -211,7 +211,7 @@ export function Learn() {
                         <h4 className="font-semibold text-gray-900 dark:text-white mb-1">{module.title}</h4>
                         <p className="text-sm text-gray-600 dark:text-gray-400">{module.description}</p>
                       </div>
-                      <button className="p-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition">
+                      <button className="p-2 bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800/50 transition">
                         <Play className="w-4 h-4" />
                       </button>
                     </div>
@@ -223,11 +223,11 @@ export function Learn() {
                       </span>
                       <span>⏱️ {module.duration}</span>
                       <span className={`px-2 py-1 rounded-full ${
-                        module.level === 'Beginner' ? 'bg-green-100 text-green-700' : module.level === 'Intermediate' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'
+                        module.level === 'Beginner' ? 'bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300' : module.level === 'Intermediate' ? 'bg-yellow-100 dark:bg-yellow-900/50 text-yellow-700 dark:text-yellow-300' : 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300'
                       }`}>
                         {module.level}
                       </span>
-                      <span className={`px-2 py-1 rounded-full ${module.completed ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600 dark:text-gray-400'}`}>
+                      <span className={`px-2 py-1 rounded-full ${module.completed ? 'bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300' : 'bg-gray-100 text-gray-600 dark:text-gray-400'}`}>
                         {module.completed ? 'Completed' : 'Not started'}
                       </span>
                     </div>
@@ -267,7 +267,7 @@ export function Learn() {
           </div>
 
           {/* Quick Quiz */}
-          <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl border border-purple-200 p-6">
+          <div className="bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950/40 dark:to-blue-950/40 rounded-xl border border-purple-200 dark:border-purple-900 p-6">
             <h3 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
               <Brain className="w-5 h-5 text-purple-600" />
               Daily Quiz
@@ -385,7 +385,7 @@ export function Learn() {
               </>
             ) : (
               <div className="text-center">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
                   <CheckCircle className="w-8 h-8 text-green-600" />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">

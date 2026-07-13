@@ -300,7 +300,7 @@ export function Learn() {
             <select
               value={language}
               onChange={(e) => handleLanguageChange(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
             >
               {LANGUAGES.map((l) => (
                 <option key={l.code} value={l.code}>{l.label}</option>
@@ -376,7 +376,7 @@ export function Learn() {
                     <button
                       key={i}
                       onClick={() => handleQuizAnswer(i)}
-                      className="w-full text-left px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition"
+                      className="w-full text-left px-4 py-3 border border-gray-300 dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-white rounded-lg hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/50 transition"
                     >
                       {option}
                     </button>

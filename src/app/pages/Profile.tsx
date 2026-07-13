@@ -262,7 +262,7 @@ export function Profile() {
                         type="text"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                       />
                       <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-400">
                         <Edit2 className="w-4 h-4" />
@@ -293,7 +293,7 @@ export function Profile() {
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="+250 788 123 456"
-                        className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                        className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                       />
                     </div>
                   </div>
@@ -303,7 +303,7 @@ export function Profile() {
                     <select
                       value={language}
                       onChange={(e) => setLanguage(e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                     >
                       <option value="en">English</option>
                       <option value="rw">Kinyarwanda</option>
@@ -341,14 +341,14 @@ export function Profile() {
                     placeholder="New password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-white rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <input
                     type="password"
                     placeholder="Confirm new password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-white rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   {passwordMessage && (
                     <p className={`text-sm ${passwordMessage.startsWith('Error') ? 'text-red-600' : 'text-green-600'}`}>{passwordMessage}</p>
@@ -463,21 +463,21 @@ export function Profile() {
                     placeholder="Provider name (e.g. MTN Mobile Money)"
                     value={newProvider}
                     onChange={(e) => setNewProvider(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-white rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <input
                     type="text"
                     placeholder="Account type (e.g. Mobile Wallet, Savings)"
                     value={newAccountType}
                     onChange={(e) => setNewAccountType(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-white rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <input
                     type="number"
                     placeholder="Current balance (RWF)"
                     value={newBalance}
                     onChange={(e) => setNewBalance(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-white rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <div className="flex gap-2">
                     <button onClick={handleAddAccount} className="flex-1 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition">
@@ -533,7 +533,7 @@ export function Profile() {
               type="text"
               value={deleteConfirmText}
               onChange={(e) => setDeleteConfirmText(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-red-500 mb-4"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-white rounded-lg outline-none focus:ring-2 focus:ring-red-500 mb-4"
             />
             {deleteError && <p className="text-sm text-red-600 mb-3">{deleteError}</p>}
             <div className="flex gap-3">

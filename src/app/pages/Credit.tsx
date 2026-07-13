@@ -258,7 +258,7 @@ export function Credit() {
                 <select
                   value={purpose}
                   onChange={(e) => setPurpose(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                 >
                   {PURPOSES.map((p) => (
                     <option key={p} value={p}>{p}</option>

@@ -299,14 +299,14 @@ export function Manage() {
                       placeholder="Category name (e.g. Food & Dining)"
                       value={newBudgetCategory}
                       onChange={(e) => setNewBudgetCategory(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-white rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <input
                       type="number"
                       placeholder="Monthly limit (RWF)"
                       value={newBudgetLimit}
                       onChange={(e) => setNewBudgetLimit(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-white rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <div className="flex gap-2">
                       <button onClick={handleAddBudget} className="flex-1 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition">
@@ -368,7 +368,7 @@ export function Manage() {
                   <select
                     value={expenseCategory}
                     onChange={(e) => setExpenseCategory(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-white rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="">Select category</option>
                     {budgets.map((b) => (
@@ -380,14 +380,14 @@ export function Manage() {
                     placeholder="Merchant (e.g. Simba Supermarket)"
                     value={expenseMerchant}
                     onChange={(e) => setExpenseMerchant(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-white rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <input
                     type="number"
                     placeholder="Amount (RWF)"
                     value={expenseAmount}
                     onChange={(e) => setExpenseAmount(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-white rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <div className="flex gap-2">
                     <button onClick={handleAddExpense} className="flex-1 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition">
@@ -495,20 +495,20 @@ export function Manage() {
                     placeholder="Goal name (e.g. School Fees)"
                     value={goalName}
                     onChange={(e) => setGoalName(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-white rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <input
                     type="number"
                     placeholder="Target amount (RWF)"
                     value={goalTarget}
                     onChange={(e) => setGoalTarget(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-white rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <input
                     type="date"
                     value={goalDeadline}
                     onChange={(e) => setGoalDeadline(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-white rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <div className="flex gap-2">
                     <button onClick={handleAddGoal} className="flex-1 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition">

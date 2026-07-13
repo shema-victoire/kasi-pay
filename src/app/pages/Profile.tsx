@@ -181,19 +181,19 @@ export function Profile() {
     <div className="space-y-6">
       {/* Page Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Account Settings</h1>
-        <p className="text-gray-600">Manage your profile and account preferences</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Account Settings</h1>
+        <p className="text-gray-600 dark:text-gray-400">Manage your profile and account preferences</p>
       </div>
 
       {/* Profile Header Card */}
-      <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl p-8 text-white">
+      <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl p-4 sm:p-8 text-white">
         <div className="flex flex-col md:flex-row items-center gap-6">
           <div className="relative">
             <div className="w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-4xl font-bold">
               {initials}
             </div>
-            <button className="absolute bottom-0 right-0 w-8 h-8 bg-white text-blue-600 rounded-full flex items-center justify-center hover:bg-blue-50 transition">
-              <Camera className="w-4 h-4" />
+            <button className="absolute bottom-0 right-0 w-10 h-10 bg-white text-blue-600 rounded-full flex items-center justify-center hover:bg-blue-50 transition shadow-md">
+              <Camera className="w-5 h-5" />
             </button>
           </div>
           <div className="text-center md:text-left flex-1">
@@ -214,33 +214,33 @@ export function Profile() {
       </div>
 
       {/* Settings Tabs */}
-      <div className="bg-white rounded-xl border border-gray-200">
-        <div className="border-b border-gray-200">
-          <nav className="flex gap-2 p-2">
+      <div className="bg-white dark:bg-[#1a1a1a] rounded-xl border border-gray-200 dark:border-gray-800 dark:border-gray-800">
+        <div className="border-b border-gray-200 dark:border-gray-800">
+          <nav className="flex gap-2 p-2 overflow-x-auto">
             <button
               onClick={() => setActiveTab('profile')}
-              className={`flex items-center gap-2 py-3 px-4 rounded-lg transition ${activeTab === 'profile' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 hover:bg-gray-50'}`}
+              className={`flex items-center gap-2 py-3 px-4 rounded-lg transition ${activeTab === 'profile' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:bg-gray-900'}`}
             >
               <User className="w-4 h-4" />
               Profile
             </button>
             <button
               onClick={() => setActiveTab('security')}
-              className={`flex items-center gap-2 py-3 px-4 rounded-lg transition ${activeTab === 'security' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 hover:bg-gray-50'}`}
+              className={`flex items-center gap-2 py-3 px-4 rounded-lg transition ${activeTab === 'security' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:bg-gray-900'}`}
             >
               <Shield className="w-4 h-4" />
               Security
             </button>
             <button
               onClick={() => setActiveTab('notifications')}
-              className={`flex items-center gap-2 py-3 px-4 rounded-lg transition ${activeTab === 'notifications' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 hover:bg-gray-50'}`}
+              className={`flex items-center gap-2 py-3 px-4 rounded-lg transition ${activeTab === 'notifications' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:bg-gray-900'}`}
             >
               <Bell className="w-4 h-4" />
               Notifications
             </button>
             <button
               onClick={() => setActiveTab('linked')}
-              className={`flex items-center gap-2 py-3 px-4 rounded-lg transition ${activeTab === 'linked' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 hover:bg-gray-50'}`}
+              className={`flex items-center gap-2 py-3 px-4 rounded-lg transition ${activeTab === 'linked' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:bg-gray-900'}`}
             >
               <CreditCard className="w-4 h-4" />
               Linked Accounts
@@ -253,7 +253,7 @@ export function Profile() {
           {activeTab === 'profile' && (
             <div className="max-w-2xl space-y-6">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Personal Information</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Personal Information</h3>
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
@@ -262,9 +262,9 @@ export function Profile() {
                         type="text"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                       />
-                      <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                      <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-400">
                         <Edit2 className="w-4 h-4" />
                       </button>
                     </div>
@@ -279,7 +279,7 @@ export function Profile() {
                         value={user?.email ?? ''}
                         disabled
                         title="Email is tied to your login and can't be changed here"
-                        className="flex-1 px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500 outline-none cursor-not-allowed"
+                        className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900 text-gray-500 dark:text-gray-400 outline-none cursor-not-allowed"
                       />
                     </div>
                   </div>
@@ -293,7 +293,7 @@ export function Profile() {
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="+250 788 123 456"
-                        className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                        className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                       />
                     </div>
                   </div>
@@ -303,7 +303,7 @@ export function Profile() {
                     <select
                       value={language}
                       onChange={(e) => setLanguage(e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                     >
                       <option value="en">English</option>
                       <option value="rw">Kinyarwanda</option>
@@ -334,21 +334,21 @@ export function Profile() {
           {activeTab === 'security' && (
             <div className="max-w-2xl space-y-6">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Change Password</h3>
-                <div className="p-4 border border-gray-200 rounded-lg space-y-3">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Change Password</h3>
+                <div className="p-4 border border-gray-200 dark:border-gray-800 rounded-lg space-y-3">
                   <input
                     type="password"
                     placeholder="New password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <input
                     type="password"
                     placeholder="Confirm new password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   {passwordMessage && (
                     <p className={`text-sm ${passwordMessage.startsWith('Error') ? 'text-red-600' : 'text-green-600'}`}>{passwordMessage}</p>
@@ -382,16 +382,16 @@ export function Profile() {
           {/* Notifications Tab */}
           {activeTab === 'notifications' && (
             <div className="max-w-2xl space-y-4">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Notification Preferences</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Notification Preferences</h3>
               {!prefs ? (
-                <p className="text-sm text-gray-500">Loading…</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Loading…</p>
               ) : (
                 <div className="space-y-3">
                   {PREF_LABELS.map(({ key, title, description }) => (
-                    <div key={key} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                    <div key={key} className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-800 rounded-lg">
                       <div>
-                        <p className="font-medium text-gray-900">{title}</p>
-                        <p className="text-sm text-gray-600">{description}</p>
+                        <p className="font-medium text-gray-900 dark:text-white">{title}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{description}</p>
                       </div>
                       <label className="relative inline-flex items-center cursor-pointer">
                         <input
@@ -400,7 +400,7 @@ export function Profile() {
                           onChange={() => togglePref(key)}
                           className="sr-only peer"
                         />
-                        <div className="w-11 h-6 bg-gray-200 peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 dark:border-gray-700 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                       </label>
                     </div>
                   ))}
@@ -412,22 +412,22 @@ export function Profile() {
           {/* Linked Accounts Tab */}
           {activeTab === 'linked' && (
             <div className="max-w-2xl space-y-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Linked Payment Accounts</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Linked Payment Accounts</h3>
 
               {linkedAccounts.length === 0 ? (
-                <p className="text-sm text-gray-500">No accounts linked yet.</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">No accounts linked yet.</p>
               ) : (
                 <div className="space-y-4">
                   {linkedAccounts.map((acc) => (
-                    <div key={acc.id} className={`p-4 border-2 rounded-lg ${acc.is_primary ? 'border-green-200 bg-green-50' : 'border-gray-200'}`}>
-                      <div className="flex items-center justify-between">
+                    <div key={acc.id} className={`p-4 border-2 rounded-lg ${acc.is_primary ? 'border-green-200 bg-green-50' : 'border-gray-200 dark:border-gray-800'}`}>
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-xl border border-gray-200">
+                          <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-xl border border-gray-200 dark:border-gray-800">
                             {acc.icon || '🏦'}
                           </div>
                           <div>
-                            <p className="font-medium text-gray-900">{acc.provider_name}</p>
-                            <p className="text-sm text-gray-600">{acc.account_type} · RWF {Number(acc.balance).toLocaleString()}</p>
+                            <p className="font-medium text-gray-900 dark:text-white">{acc.provider_name}</p>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">{acc.account_type} · RWF {Number(acc.balance).toLocaleString()}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
@@ -457,33 +457,33 @@ export function Profile() {
               )}
 
               {showAddAccount ? (
-                <div className="p-4 border border-gray-200 rounded-lg space-y-3">
+                <div className="p-4 border border-gray-200 dark:border-gray-800 rounded-lg space-y-3">
                   <input
                     type="text"
                     placeholder="Provider name (e.g. MTN Mobile Money)"
                     value={newProvider}
                     onChange={(e) => setNewProvider(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <input
                     type="text"
                     placeholder="Account type (e.g. Mobile Wallet, Savings)"
                     value={newAccountType}
                     onChange={(e) => setNewAccountType(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <input
                     type="number"
                     placeholder="Current balance (RWF)"
                     value={newBalance}
                     onChange={(e) => setNewBalance(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <div className="flex gap-2">
                     <button onClick={handleAddAccount} className="flex-1 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition">
                       Save
                     </button>
-                    <button onClick={() => setShowAddAccount(false)} className="flex-1 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <button onClick={() => setShowAddAccount(false)} className="flex-1 py-2 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:bg-gray-900 transition">
                       Cancel
                     </button>
                   </div>
@@ -491,7 +491,7 @@ export function Profile() {
               ) : (
                 <button
                   onClick={() => setShowAddAccount(true)}
-                  className="w-full py-4 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-500 hover:text-blue-600 transition flex items-center justify-center gap-2"
+                  className="w-full py-4 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg text-gray-600 dark:text-gray-400 hover:border-blue-500 hover:text-blue-600 transition flex items-center justify-center gap-2"
                 >
                   <Plus className="w-5 h-5" />
                   <span className="font-medium">Link New Account</span>
@@ -503,11 +503,11 @@ export function Profile() {
       </div>
 
       {/* Logout */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div className="bg-white dark:bg-[#1a1a1a] rounded-xl border border-gray-200 dark:border-gray-800 dark:border-gray-800 p-6">
         <div className="flex items-center justify-between">
           <div>
-            <p className="font-medium text-gray-900">Sign Out</p>
-            <p className="text-sm text-gray-600">Sign out from your KASI PAY account</p>
+            <p className="font-medium text-gray-900 dark:text-white">Sign Out</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Sign out from your KASI PAY account</p>
           </div>
           <button
             onClick={signOut}
@@ -522,9 +522,9 @@ export function Profile() {
       {/* Delete Account Confirmation Modal */}
       {showDeleteConfirm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl p-8 max-w-md w-full">
+          <div className="bg-white dark:bg-[#1a1a1a] rounded-2xl p-4 sm:p-8 max-w-md w-full">
             <h3 className="text-xl font-bold text-red-900 mb-3">Delete your account?</h3>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
               This permanently deletes your account and everything tied to it: budgets, transactions, savings goals,
               credit score history, loans, and payment history. This cannot be undone.
             </p>
@@ -533,7 +533,7 @@ export function Profile() {
               type="text"
               value={deleteConfirmText}
               onChange={(e) => setDeleteConfirmText(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-red-500 mb-4"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-red-500 mb-4"
             />
             {deleteError && <p className="text-sm text-red-600 mb-3">{deleteError}</p>}
             <div className="flex gap-3">
@@ -546,7 +546,7 @@ export function Profile() {
               </button>
               <button
                 onClick={() => { setShowDeleteConfirm(false); setDeleteConfirmText(''); setDeleteError(null); }}
-                className="flex-1 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition"
+                className="flex-1 py-3 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-700 hover:bg-gray-50 dark:bg-gray-900 transition"
               >
                 Cancel
               </button>

@@ -119,7 +119,7 @@ export function AppLayout() {
             <div className="flex items-center gap-3">
               <button
                 onClick={toggleTheme}
-                className="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
+                className="p-2.5 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
               >
                 {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
               </button>
@@ -128,7 +128,7 @@ export function AppLayout() {
               <div className="relative">
                 <button
                   onClick={handleOpenNotifications}
-                  className="relative p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
+                  className="relative p-2.5 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
                 >
                   <Bell className="w-5 h-5" />
                   {unreadCount > 0 && (
@@ -142,7 +142,7 @@ export function AppLayout() {
                 {notifOpen && (
                   <>
                     <div className="fixed inset-0 z-40" onClick={() => setNotifOpen(false)} />
-                    <div className="absolute right-0 mt-2 w-80 max-h-96 overflow-y-auto bg-white dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-xl shadow-xl z-50">
+                    <div className="absolute right-0 mt-2 w-[calc(100vw-2rem)] max-w-80 max-h-96 overflow-y-auto bg-white dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-xl shadow-xl z-50">
                       <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
                         <p className="font-semibold text-sm text-gray-900 dark:text-white">Notifications</p>
                       </div>
@@ -180,7 +180,7 @@ export function AppLayout() {
                     : undefined
                 })) as any}
                 className={({ isActive }) =>
-                  `p-2 rounded-lg transition ${
+                  `p-2.5 rounded-lg transition ${
                     isActive
                       ? ''
                       : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
@@ -191,7 +191,7 @@ export function AppLayout() {
               </NavLink>
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
+                className="md:hidden p-2.5 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
               >
                 {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>

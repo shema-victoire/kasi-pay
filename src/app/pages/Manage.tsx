@@ -175,56 +175,56 @@ export function Manage() {
   };
 
   if (loading) {
-    return <div className="text-center py-20 text-gray-500">Loading your finances...</div>;
+    return <div className="text-center py-20 text-gray-500 dark:text-gray-400">Loading your finances...</div>;
   }
 
   return (
     <div className="space-y-6">
       {/* Page Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Personal Finance Management</h1>
-        <p className="text-gray-600">Track your spending, manage budgets, and achieve your savings goals</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Personal Finance Management</h1>
+        <p className="text-gray-600 dark:text-gray-400">Track your spending, manage budgets, and achieve your savings goals</p>
       </div>
 
       {/* Summary Cards */}
       <div className="grid md:grid-cols-3 gap-4">
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="bg-white dark:bg-[#1a1a1a] rounded-xl border border-gray-200 dark:border-gray-800 dark:border-gray-800 p-6">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-sm text-gray-600">Monthly Budget</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Monthly Budget</p>
             <TrendingUp className="w-5 h-5 text-blue-600" />
           </div>
-          <p className="text-2xl font-bold text-gray-900">RWF {totalBudget.toLocaleString()}</p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-white">RWF {totalBudget.toLocaleString()}</p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="bg-white dark:bg-[#1a1a1a] rounded-xl border border-gray-200 dark:border-gray-800 dark:border-gray-800 p-6">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-sm text-gray-600">Total Spent</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Total Spent</p>
             <TrendingUp className="w-5 h-5 text-purple-600" />
           </div>
-          <p className="text-2xl font-bold text-gray-900">RWF {totalSpent.toLocaleString()}</p>
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-2xl font-bold text-gray-900 dark:text-white">RWF {totalSpent.toLocaleString()}</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
             {totalBudget > 0 ? `${((totalSpent / totalBudget) * 100).toFixed(0)}% of budget` : 'No budget set yet'}
           </p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="bg-white dark:bg-[#1a1a1a] rounded-xl border border-gray-200 dark:border-gray-800 dark:border-gray-800 p-6">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-sm text-gray-600">Remaining</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Remaining</p>
             <TrendingUp className="w-5 h-5 text-green-600" />
           </div>
           <p className="text-2xl font-bold text-green-600">RWF {budgetRemaining.toLocaleString()}</p>
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
             {totalBudget > 0 ? `${((budgetRemaining / totalBudget) * 100).toFixed(0)}% left` : '—'}
           </p>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="bg-white rounded-xl border border-gray-200">
-        <div className="border-b border-gray-200">
+      <div className="bg-white dark:bg-[#1a1a1a] rounded-xl border border-gray-200 dark:border-gray-800 dark:border-gray-800">
+        <div className="border-b border-gray-200 dark:border-gray-800">
           <nav className="flex gap-2 p-2">
             <button
               onClick={() => setActiveTab('budget')}
               className={`flex-1 py-3 px-4 rounded-lg transition ${
-                activeTab === 'budget' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 hover:bg-gray-50'
+                activeTab === 'budget' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:bg-gray-900'
               }`}
             >
               Budget Overview
@@ -232,7 +232,7 @@ export function Manage() {
             <button
               onClick={() => setActiveTab('expenses')}
               className={`flex-1 py-3 px-4 rounded-lg transition ${
-                activeTab === 'expenses' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 hover:bg-gray-50'
+                activeTab === 'expenses' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:bg-gray-900'
               }`}
             >
               Expense Tracking
@@ -240,7 +240,7 @@ export function Manage() {
             <button
               onClick={() => setActiveTab('savings')}
               className={`flex-1 py-3 px-4 rounded-lg transition ${
-                activeTab === 'savings' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 hover:bg-gray-50'
+                activeTab === 'savings' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:bg-gray-900'
               }`}
             >
               Savings Goals
@@ -253,9 +253,9 @@ export function Manage() {
           {activeTab === 'budget' && (
             <div className="grid lg:grid-cols-2 gap-6">
               <div>
-                <h3 className="font-semibold text-gray-900 mb-4">Budget Categories</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Budget Categories</h3>
                 {budgets.length === 0 && (
-                  <p className="text-sm text-gray-500 mb-4">No budget categories yet. Add your first one below.</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">No budget categories yet. Add your first one below.</p>
                 )}
                 <div className="space-y-4">
                   {budgets.map((item) => {
@@ -269,10 +269,10 @@ export function Manage() {
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
                             <IconComponent className="w-4 h-4" style={{ color: item.color || '#3b82f6' }} />
-                            <span className="text-sm font-medium text-gray-900">{item.category}</span>
+                            <span className="text-sm font-medium text-gray-900 dark:text-white">{item.category}</span>
                           </div>
                           <div className="text-right">
-                            <p className="text-sm font-semibold text-gray-900">
+                            <p className="text-sm font-semibold text-gray-900 dark:text-white">
                               RWF {spent.toLocaleString()} / {Number(item.monthly_limit).toLocaleString()}
                             </p>
                           </div>
@@ -283,7 +283,7 @@ export function Manage() {
                             style={{ width: `${Math.min(percentage, 100)}%` }}
                           />
                         </div>
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                           {percentage.toFixed(0)}% used
                           {isOverBudget && ' - Over budget!'}
                         </p>
@@ -293,26 +293,26 @@ export function Manage() {
                 </div>
 
                 {showAddBudget ? (
-                  <div className="mt-6 p-4 border border-gray-200 rounded-lg space-y-3">
+                  <div className="mt-6 p-4 border border-gray-200 dark:border-gray-800 rounded-lg space-y-3">
                     <input
                       type="text"
                       placeholder="Category name (e.g. Food & Dining)"
                       value={newBudgetCategory}
                       onChange={(e) => setNewBudgetCategory(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <input
                       type="number"
                       placeholder="Monthly limit (RWF)"
                       value={newBudgetLimit}
                       onChange={(e) => setNewBudgetLimit(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <div className="flex gap-2">
                       <button onClick={handleAddBudget} className="flex-1 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition">
                         Save
                       </button>
-                      <button onClick={() => setShowAddBudget(false)} className="flex-1 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                      <button onClick={() => setShowAddBudget(false)} className="flex-1 py-2 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:bg-gray-900 transition">
                         Cancel
                       </button>
                     </div>
@@ -320,7 +320,7 @@ export function Manage() {
                 ) : (
                   <button
                     onClick={() => setShowAddBudget(true)}
-                    className="w-full mt-6 py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-500 hover:text-blue-600 transition flex items-center justify-center gap-2"
+                    className="w-full mt-6 py-3 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg text-gray-600 dark:text-gray-400 hover:border-blue-500 hover:text-blue-600 transition flex items-center justify-center gap-2"
                   >
                     <Plus className="w-4 h-4" />
                     Add Budget Category
@@ -329,7 +329,7 @@ export function Manage() {
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-900 mb-4">Spending Breakdown</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Spending Breakdown</h3>
                 {pieData.length > 0 ? (
                   <ResponsiveContainer width="100%" height={280}>
                     <PieChart>
@@ -343,7 +343,7 @@ export function Manage() {
                     </PieChart>
                   </ResponsiveContainer>
                 ) : (
-                  <p className="text-sm text-gray-500">No spending recorded yet. Add an expense to see your breakdown.</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">No spending recorded yet. Add an expense to see your breakdown.</p>
                 )}
               </div>
             </div>
@@ -353,7 +353,7 @@ export function Manage() {
           {activeTab === 'expenses' && (
             <div>
               <div className="flex items-center justify-between mb-6">
-                <h3 className="font-semibold text-gray-900">Recent Transactions</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white">Recent Transactions</h3>
                 <button
                   onClick={() => setShowAddExpense(!showAddExpense)}
                   className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
@@ -364,11 +364,11 @@ export function Manage() {
               </div>
 
               {showAddExpense && (
-                <div className="mb-6 p-4 border border-gray-200 rounded-lg space-y-3">
+                <div className="mb-6 p-4 border border-gray-200 dark:border-gray-800 rounded-lg space-y-3">
                   <select
                     value={expenseCategory}
                     onChange={(e) => setExpenseCategory(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="">Select category</option>
                     {budgets.map((b) => (
@@ -380,20 +380,20 @@ export function Manage() {
                     placeholder="Merchant (e.g. Simba Supermarket)"
                     value={expenseMerchant}
                     onChange={(e) => setExpenseMerchant(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <input
                     type="number"
                     placeholder="Amount (RWF)"
                     value={expenseAmount}
                     onChange={(e) => setExpenseAmount(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <div className="flex gap-2">
                     <button onClick={handleAddExpense} className="flex-1 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition">
                       Save
                     </button>
-                    <button onClick={() => setShowAddExpense(false)} className="flex-1 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <button onClick={() => setShowAddExpense(false)} className="flex-1 py-2 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:bg-gray-900 transition">
                       Cancel
                     </button>
                   </div>
@@ -401,27 +401,27 @@ export function Manage() {
               )}
 
               {transactions.length === 0 ? (
-                <p className="text-sm text-gray-500">No transactions yet.</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">No transactions yet.</p>
               ) : (
                 <div className="space-y-3">
                   {transactions.map((transaction) => {
                     const IconComponent = ICONS[transaction.category] || DEFAULT_ICON;
                     return (
-                      <div key={transaction.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                      <div key={transaction.id} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900 rounded-lg hover:bg-gray-100 transition">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-                            <IconComponent className="w-5 h-5 text-gray-600" />
+                            <IconComponent className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                           </div>
                           <div>
-                            <p className="font-medium text-gray-900">{transaction.merchant}</p>
-                            <p className="text-sm text-gray-500">{transaction.category}</p>
+                            <p className="font-medium text-gray-900 dark:text-white">{transaction.merchant}</p>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">{transaction.category}</p>
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className={`font-semibold ${transaction.type === 'received' ? 'text-green-600' : 'text-gray-900'}`}>
+                          <p className={`font-semibold ${transaction.type === 'received' ? 'text-green-600' : 'text-gray-900 dark:text-white'}`}>
                             {transaction.type === 'received' ? '+' : '-'}RWF {Math.abs(transaction.amount).toLocaleString()}
                           </p>
-                          <p className="text-sm text-gray-500">{new Date(transaction.occurred_at).toLocaleDateString()}</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">{new Date(transaction.occurred_at).toLocaleDateString()}</p>
                         </div>
                       </div>
                     );
@@ -434,26 +434,26 @@ export function Manage() {
           {/* Savings Goals Tab */}
           {activeTab === 'savings' && (
             <div>
-              {goals.length === 0 && <p className="text-sm text-gray-500 mb-4">No savings goals yet.</p>}
+              {goals.length === 0 && <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">No savings goals yet.</p>}
               <div className="grid md:grid-cols-2 gap-6">
                 {goals.map((goal) => {
                   const progress = goal.target_amount > 0 ? (goal.current_amount / goal.target_amount) * 100 : 0;
                   const remaining = goal.target_amount - goal.current_amount;
 
                   return (
-                    <div key={goal.id} className="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl p-6">
+                    <div key={goal.id} className="bg-gradient-to-br from-gray-50 to-white border border-gray-200 dark:border-gray-800 rounded-xl p-6">
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex items-center gap-3">
                           <div className="text-3xl">{goal.icon || '🎯'}</div>
                           <div>
-                            <h4 className="font-semibold text-gray-900">{goal.name}</h4>
-                            <p className="text-sm text-gray-500">
+                            <h4 className="font-semibold text-gray-900 dark:text-white">{goal.name}</h4>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
                               {goal.deadline ? `Target: ${goal.deadline}` : 'No deadline set'}
                             </p>
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="text-sm text-gray-600">Progress</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">Progress</p>
                           <p className="text-xl font-bold text-blue-600">{progress.toFixed(0)}%</p>
                         </div>
                       </div>
@@ -466,15 +466,15 @@ export function Manage() {
                           />
                         </div>
                         <div className="flex items-center justify-between mt-2">
-                          <p className="text-sm text-gray-600">RWF {goal.current_amount.toLocaleString()}</p>
-                          <p className="text-sm text-gray-600">RWF {goal.target_amount.toLocaleString()}</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">RWF {goal.current_amount.toLocaleString()}</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">RWF {goal.target_amount.toLocaleString()}</p>
                         </div>
                       </div>
 
-                      <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200">
+                      <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200 dark:border-gray-800">
                         <div>
-                          <p className="text-xs text-gray-500">Remaining</p>
-                          <p className="font-semibold text-gray-900">RWF {Math.max(remaining, 0).toLocaleString()}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">Remaining</p>
+                          <p className="font-semibold text-gray-900 dark:text-white">RWF {Math.max(remaining, 0).toLocaleString()}</p>
                         </div>
                         <button
                           onClick={() => handleAddFunds(goal)}
@@ -489,32 +489,32 @@ export function Manage() {
               </div>
 
               {showAddGoal ? (
-                <div className="mt-6 p-4 border border-gray-200 rounded-lg space-y-3">
+                <div className="mt-6 p-4 border border-gray-200 dark:border-gray-800 rounded-lg space-y-3">
                   <input
                     type="text"
                     placeholder="Goal name (e.g. School Fees)"
                     value={goalName}
                     onChange={(e) => setGoalName(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <input
                     type="number"
                     placeholder="Target amount (RWF)"
                     value={goalTarget}
                     onChange={(e) => setGoalTarget(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <input
                     type="date"
                     value={goalDeadline}
                     onChange={(e) => setGoalDeadline(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <div className="flex gap-2">
                     <button onClick={handleAddGoal} className="flex-1 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition">
                       Save
                     </button>
-                    <button onClick={() => setShowAddGoal(false)} className="flex-1 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <button onClick={() => setShowAddGoal(false)} className="flex-1 py-2 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:bg-gray-900 transition">
                       Cancel
                     </button>
                   </div>
@@ -522,7 +522,7 @@ export function Manage() {
               ) : (
                 <button
                   onClick={() => setShowAddGoal(true)}
-                  className="w-full mt-6 py-4 border-2 border-dashed border-gray-300 rounded-xl text-gray-600 hover:border-blue-500 hover:text-blue-600 transition flex items-center justify-center gap-2"
+                  className="w-full mt-6 py-4 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl text-gray-600 dark:text-gray-400 hover:border-blue-500 hover:text-blue-600 transition flex items-center justify-center gap-2"
                 >
                   <Target className="w-5 h-5" />
                   <span className="font-medium">Create New Savings Goal</span>

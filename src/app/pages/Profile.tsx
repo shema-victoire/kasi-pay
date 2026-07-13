@@ -69,8 +69,24 @@ export function Profile() {
 
   useEffect(() => {
     if (!user) return;
-    supabase.from('notification_preferences').select('*').eq('user_id', user.id).single()
-      .then(({ data }) => { if (data) setPrefs(data as NotificationPrefs); });
+    (async () => {
+      const { data } = await supabase.from('notification_preferences').select('*').eq('user_id', user.id).single();
+      if (data) {
+        setPrefs(data as NotificationPrefs);
+      } else {
+        const defaults: NotificationPrefs = {
+          payment_notifications: true,
+          credit_score_updates: true,
+          budget_alerts: true,
+          savings_goals: true,
+          learning_reminders: true,
+          promotional_offers: false,
+          security_alerts: true,
+        };
+        setPrefs(defaults);
+        await supabase.from('notification_preferences').insert({ user_id: user.id, ...defaults });
+      }
+    })();
     loadLinkedAccounts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
@@ -144,8 +160,7 @@ export function Profile() {
     setPrefs(updated);
     await supabase
       .from('notification_preferences')
-      .update({ [key]: updated[key], updated_at: new Date().toISOString() })
-      .eq('user_id', user.id);
+      .upsert({ user_id: user.id, [key]: updated[key], updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
   };
 
   const handleSetPrimary = async (accountId: string) => {

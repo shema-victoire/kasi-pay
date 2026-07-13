@@ -277,7 +277,7 @@ export function Manage() {
                             </p>
                           </div>
                         </div>
-                        <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                        <div className="h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
                           <div
                             className={`h-full ${isOverBudget ? 'bg-red-500' : 'bg-gradient-to-r from-blue-500 to-purple-500'}`}
                             style={{ width: `${Math.min(percentage, 100)}%` }}
@@ -441,7 +441,7 @@ export function Manage() {
                   const remaining = goal.target_amount - goal.current_amount;
 
                   return (
-                    <div key={goal.id} className="bg-gradient-to-br from-gray-50 to-white border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+                    <div key={goal.id} className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-xl p-6">
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex items-center gap-3">
                           <div className="text-3xl">{goal.icon || '🎯'}</div>
@@ -459,7 +459,7 @@ export function Manage() {
                       </div>
 
                       <div className="mb-4">
-                        <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
+                        <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                           <div
                             className="h-full bg-gradient-to-r from-blue-500 to-blue-600"
                             style={{ width: `${Math.min(progress, 100)}%` }}
@@ -471,7 +471,7 @@ export function Manage() {
                         </div>
                       </div>
 
-                      <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200 dark:border-gray-800">
+                      <div className="flex items-center justify-between p-3 bg-white dark:bg-[#0a0a0a] rounded-lg border border-gray-200 dark:border-gray-800">
                         <div>
                           <p className="text-xs text-gray-500 dark:text-gray-400">Remaining</p>
                           <p className="font-semibold text-gray-900 dark:text-white">RWF {Math.max(remaining, 0).toLocaleString()}</p>

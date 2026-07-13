@@ -299,7 +299,7 @@ export function Credit() {
                         <span className="text-sm font-semibold text-gray-900 dark:text-white">{factor.score}/100</span>
                       </div>
                     </div>
-                    <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
                       <div className={`h-full ${FACTOR_COLORS[factor.color].bg}`} style={{ width: `${factor.score}%` }} />
                     </div>
                   </div>

@@ -121,6 +121,11 @@ export function Credit() {
     });
     setApplying(false);
     if (!error) {
+      await supabase.from('notifications').insert({
+        user_id: user.id,
+        title: 'Loan application recorded',
+        body: `RWF ${loanAmount.toLocaleString()} over ${loanPeriod} months (sandbox)`,
+      });
       setShowApplication(true);
       calculateAndLoad();
     }

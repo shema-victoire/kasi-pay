@@ -157,11 +157,21 @@ export function Manage() {
     if (!input) return;
     const amount = Number(input);
     if (!amount || amount <= 0) return;
+    const newAmount = goal.current_amount + amount;
     const { error } = await supabase
       .from('savings_goals')
-      .update({ current_amount: goal.current_amount + amount })
+      .update({ current_amount: newAmount })
       .eq('id', goal.id);
-    if (!error) loadAll();
+    if (!error) {
+      if (goal.current_amount < goal.target_amount && newAmount >= goal.target_amount && user) {
+        await supabase.from('notifications').insert({
+          user_id: user.id,
+          title: 'Savings goal reached',
+          body: `"${goal.name}" is fully funded`,
+        });
+      }
+      loadAll();
+    }
   };
 
   if (loading) {

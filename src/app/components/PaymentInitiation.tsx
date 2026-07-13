@@ -55,6 +55,11 @@ export function PaymentInitiation({ onPaymentRecorded }: { onPaymentRecorded?: (
       setResultMessage(
         `Simulated payment of RWF ${Number(amount).toLocaleString()} recorded via ${activeMethod.toUpperCase()}. No real money moved.`
       );
+      await supabase.from('notifications').insert({
+        user_id: user.id,
+        title: 'Payment recorded',
+        body: `RWF ${Number(amount).toLocaleString()} via ${activeMethod.toUpperCase()} (sandbox)`,
+      });
       setAmount('');
       setPhoneNumber('');
       setProvider(null);

@@ -1,11 +1,65 @@
 import { Outlet, NavLink } from 'react-router-dom';
 import { Home, Send, CreditCard, PieChart, BookOpen, User, Wallet, Bell, Menu, X, Moon, Sun } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useTheme } from '../context/ThemeContext';
+import { useAuth } from '../context/AuthContext';
+import { supabase } from '../lib/supabaseClient';
+
+interface Notification {
+  id: string;
+  title: string;
+  body: string | null;
+  read: boolean;
+  created_at: string;
+}
+
+function timeAgo(dateStr: string) {
+  const diffMs = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diffMs / 60000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
+}
 
 export function AppLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  const { user } = useAuth();
+
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const unreadCount = notifications.filter((n) => !n.read).length;
+
+  const loadNotifications = useCallback(async () => {
+    if (!user) return;
+    const { data } = await supabase
+      .from('notifications')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(20);
+    setNotifications((data as Notification[]) ?? []);
+  }, [user]);
+
+  useEffect(() => {
+    loadNotifications();
+    if (!user) return;
+    const interval = setInterval(loadNotifications, 15000);
+    return () => clearInterval(interval);
+  }, [loadNotifications, user]);
+
+  const handleOpenNotifications = async () => {
+    const opening = !notifOpen;
+    setNotifOpen(opening);
+    if (opening && unreadCount > 0 && user) {
+      const unreadIds = notifications.filter((n) => !n.read).map((n) => n.id);
+      await supabase.from('notifications').update({ read: true }).in('id', unreadIds);
+      setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+    }
+  };
 
   const navItems = [
     { to: '/app', icon: Home, label: 'Dashboard' },
@@ -69,10 +123,52 @@ export function AppLayout() {
               >
                 {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
               </button>
-              <button className="relative p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition">
-                <Bell className="w-5 h-5" />
-                <span className="absolute top-1 right-1 w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--kp-green-mid)' }}></span>
-              </button>
+
+              {/* Notifications */}
+              <div className="relative">
+                <button
+                  onClick={handleOpenNotifications}
+                  className="relative p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
+                >
+                  <Bell className="w-5 h-5" />
+                  {unreadCount > 0 && (
+                    <span
+                      className="absolute top-1 right-1 w-2 h-2 rounded-full"
+                      style={{ backgroundColor: 'var(--kp-green-mid)' }}
+                    ></span>
+                  )}
+                </button>
+
+                {notifOpen && (
+                  <>
+                    <div className="fixed inset-0 z-40" onClick={() => setNotifOpen(false)} />
+                    <div className="absolute right-0 mt-2 w-80 max-h-96 overflow-y-auto bg-white dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-xl shadow-xl z-50">
+                      <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
+                        <p className="font-semibold text-sm text-gray-900 dark:text-white">Notifications</p>
+                      </div>
+                      {notifications.length === 0 ? (
+                        <p className="px-4 py-6 text-sm text-gray-500 text-center">Nothing yet. Real activity like payments and loans will show up here.</p>
+                      ) : (
+                        <div className="divide-y divide-gray-100 dark:divide-gray-800">
+                          {notifications.map((n) => (
+                            <div key={n.id} className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-900/50">
+                              <div className="flex items-start justify-between gap-2">
+                                <p className="text-sm font-medium text-gray-900 dark:text-white">{n.title}</p>
+                                {!n.read && (
+                                  <span className="w-2 h-2 rounded-full flex-shrink-0 mt-1" style={{ backgroundColor: 'var(--kp-green-mid)' }} />
+                                )}
+                              </div>
+                              {n.body && <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{n.body}</p>}
+                              <p className="text-xs text-gray-400 dark:text-gray-600 mt-1">{timeAgo(n.created_at)}</p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
+
               <NavLink
                 to="/app/profile"
                 style={(({ isActive }) => ({

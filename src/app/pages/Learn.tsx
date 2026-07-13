@@ -251,7 +251,7 @@ export function Learn() {
                 <div
                   key={achievement.id}
                   className={`p-3 rounded-lg border ${
-                    achievement.earned ? 'bg-gradient-to-br from-yellow-50 to-orange-50 border-yellow-200' : 'bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-800 opacity-60'
+                      achievement.earned ? 'bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/30 dark:to-orange-900/30 border-yellow-200 dark:border-yellow-900' : 'bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-800 opacity-60'
                   }`}
                 >
                   <div className="flex items-center gap-3">
@@ -286,7 +286,7 @@ export function Learn() {
           {/* Study Tips */}
           <div className="bg-white dark:bg-[#1a1a1a] rounded-xl border border-gray-200 dark:border-gray-800 dark:border-gray-800 p-6">
             <h3 className="font-semibold text-gray-900 dark:text-white mb-3">💡 Study Tips</h3>
-            <ul className="space-y-2 text-sm text-gray-700">
+            <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
               <li className="flex gap-2"><span>•</span><span>Complete one module per week</span></li>
               <li className="flex gap-2"><span>•</span><span>Apply what you learn immediately</span></li>
               <li className="flex gap-2"><span>•</span><span>Review modules to reinforce knowledge</span></li>
@@ -324,9 +324,9 @@ export function Learn() {
             </div>
 
             <div className="space-y-4 mb-6">
-              <div className="p-4 bg-blue-50 rounded-lg">
+              <div className="p-4 bg-blue-50 dark:bg-blue-950/40 rounded-lg">
                 <h4 className="font-semibold text-gray-900 dark:text-white mb-2">What you'll learn:</h4>
-                <ul className="space-y-1 text-sm text-gray-700">
+                <ul className="space-y-1 text-sm text-gray-700 dark:text-gray-300">
                   <li>✓ Core concepts and principles</li>
                   <li>✓ Practical tips and strategies</li>
                   <li>✓ Real-world examples from Rwanda</li>
@@ -370,7 +370,7 @@ export function Learn() {
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
                   Question {quizStep + 1} of {QUIZ_QUESTIONS.length}
                 </h3>
-                <p className="text-gray-700 mb-6">{QUIZ_QUESTIONS[quizStep].question}</p>
+                <p className="text-gray-700 dark:text-gray-300 mb-6">{QUIZ_QUESTIONS[quizStep].question}</p>
                 <div className="space-y-2">
                   {QUIZ_QUESTIONS[quizStep].options.map((option, i) => (
                     <button

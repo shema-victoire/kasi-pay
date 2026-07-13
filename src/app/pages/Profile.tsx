@@ -256,7 +256,7 @@ export function Profile() {
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Personal Information</h3>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Full Name</label>
                     <div className="relative">
                       <input
                         type="text"
@@ -271,7 +271,7 @@ export function Profile() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
                     <div className="flex gap-2">
                       <Mail className="w-5 h-5 text-gray-400 mt-3" />
                       <input
@@ -285,7 +285,7 @@ export function Profile() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone Number</label>
                     <div className="flex gap-2">
                       <Phone className="w-5 h-5 text-gray-400 mt-3" />
                       <input
@@ -299,7 +299,7 @@ export function Profile() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Preferred Language</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Preferred Language</label>
                     <select
                       value={language}
                       onChange={(e) => setLanguage(e.target.value)}
@@ -528,7 +528,7 @@ export function Profile() {
               This permanently deletes your account and everything tied to it: budgets, transactions, savings goals,
               credit score history, loans, and payment history. This cannot be undone.
             </p>
-            <p className="text-sm text-gray-700 mb-2">Type <strong>DELETE</strong> to confirm:</p>
+            <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">Type <strong>DELETE</strong> to confirm:</p>
             <input
               type="text"
               value={deleteConfirmText}
@@ -546,7 +546,7 @@ export function Profile() {
               </button>
               <button
                 onClick={() => { setShowDeleteConfirm(false); setDeleteConfirmText(''); setDeleteError(null); }}
-                className="flex-1 py-3 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-700 hover:bg-gray-50 dark:bg-gray-900 transition"
+                className="flex-1 py-3 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-gray-900 transition"
               >
                 Cancel
               </button>

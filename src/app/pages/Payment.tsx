@@ -62,7 +62,7 @@ export function Payment() {
         <div className="space-y-4">
           <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/40 dark:to-purple-950/40 rounded-xl p-6 border border-blue-100 dark:border-blue-900">
             <h3 className="font-semibold text-gray-900 dark:text-white mb-3">💡 Payment Tips</h3>
-            <ul className="space-y-2 text-sm text-gray-700">
+            <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
               <li className="flex gap-2"><span>•</span><span>Always verify recipient details before sending</span></li>
               <li className="flex gap-2"><span>•</span><span>QR codes are the fastest and most secure method</span></li>
               <li className="flex gap-2"><span>•</span><span>USSD works without internet connection</span></li>
@@ -70,7 +70,7 @@ export function Payment() {
             </ul>
           </div>
 
-          <div className="bg-white rounded-xl p-6 border border-gray-200 dark:border-gray-800">
+          <div className="bg-white dark:bg-[#1a1a1a] rounded-xl p-6 border border-gray-200 dark:border-gray-800">
             <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Supported Providers</h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
@@ -78,14 +78,14 @@ export function Payment() {
                   <div className="w-10 h-10 bg-yellow-400 rounded-lg flex items-center justify-center text-xs font-bold">MTN</div>
                   <span className="text-sm font-medium">MTN Mobile Money</span>
                 </div>
-                <span className="text-xs text-yellow-700 bg-yellow-50 px-2 py-1 rounded-full">Sandbox</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center text-xs font-bold text-white">AIRTEL</div>
-                  <span className="text-sm font-medium">Airtel Money</span>
-                </div>
-                <span className="text-xs text-yellow-700 bg-yellow-50 px-2 py-1 rounded-full">Sandbox</span>
+                    <span className="text-xs text-yellow-700 dark:text-yellow-400 bg-yellow-50 dark:bg-yellow-900/30 px-2 py-1 rounded-full">Sandbox</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center text-xs font-bold text-white">AIRTEL</div>
+                      <span className="text-sm font-medium">Airtel Money</span>
+                    </div>
+                    <span className="text-xs text-yellow-700 dark:text-yellow-400 bg-yellow-50 dark:bg-yellow-900/30 px-2 py-1 rounded-full">Sandbox</span>
               </div>
             </div>
           </div>

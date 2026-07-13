@@ -190,7 +190,7 @@ export function Credit() {
 
             <div className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Loan Amount: RWF {loanAmount.toLocaleString()}
                 </label>
                 <input
@@ -209,7 +209,7 @@ export function Credit() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Repayment Period: {loanPeriod} months
                 </label>
                 <input
@@ -254,7 +254,7 @@ export function Credit() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Loan Purpose</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Loan Purpose</label>
                 <select
                   value={purpose}
                   onChange={(e) => setPurpose(e.target.value)}
@@ -382,7 +382,7 @@ export function Credit() {
 
           <div className="bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-950/40 dark:to-blue-950/40 rounded-xl p-6 border border-green-100 dark:border-green-900">
             <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Benefits</h3>
-            <ul className="space-y-2 text-sm text-gray-700">
+            <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
               <li className="flex gap-2"><CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" /><span>No traditional credit history required</span></li>
               <li className="flex gap-2"><CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" /><span>Score calculated from your real activity</span></li>
               <li className="flex gap-2"><CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" /><span>Transparent, formula-based scoring</span></li>

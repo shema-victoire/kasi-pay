@@ -1,7 +1,36 @@
 import { useState, useEffect } from 'react';
-import { User, Mail, Phone, MapPin, Shield, Bell, Globe, CreditCard, Lock, LogOut, Edit2, Camera } from 'lucide-react';
+import { User, Mail, Phone, Shield, Bell, CreditCard, Lock, LogOut, Edit2, Camera, Star, Plus, Trash2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabaseClient';
+
+interface LinkedAccount {
+  id: string;
+  provider_name: string;
+  account_type: string;
+  balance: number;
+  is_primary: boolean;
+  icon: string | null;
+}
+
+interface NotificationPrefs {
+  payment_notifications: boolean;
+  credit_score_updates: boolean;
+  budget_alerts: boolean;
+  savings_goals: boolean;
+  learning_reminders: boolean;
+  promotional_offers: boolean;
+  security_alerts: boolean;
+}
+
+const PREF_LABELS: { key: keyof NotificationPrefs; title: string; description: string }[] = [
+  { key: 'payment_notifications', title: 'Payment Notifications', description: 'Alerts for incoming and outgoing payments' },
+  { key: 'credit_score_updates', title: 'Credit Score Updates', description: 'Changes to your credit score' },
+  { key: 'budget_alerts', title: 'Budget Alerts', description: 'When you exceed budget limits' },
+  { key: 'savings_goals', title: 'Savings Goals', description: 'Progress updates on your goals' },
+  { key: 'learning_reminders', title: 'Learning Reminders', description: 'Reminders to continue learning modules' },
+  { key: 'promotional_offers', title: 'Promotional Offers', description: 'Special offers and promotions' },
+  { key: 'security_alerts', title: 'Security Alerts', description: 'Login and account security notifications' },
+];
 
 export function Profile() {
   const [activeTab, setActiveTab] = useState<'profile' | 'security' | 'notifications' | 'linked'>('profile');
@@ -13,6 +42,23 @@ export function Profile() {
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
 
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordMessage, setPasswordMessage] = useState<string | null>(null);
+  const [changingPassword, setChangingPassword] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState('');
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
+  const [prefs, setPrefs] = useState<NotificationPrefs | null>(null);
+
+  const [linkedAccounts, setLinkedAccounts] = useState<LinkedAccount[]>([]);
+  const [showAddAccount, setShowAddAccount] = useState(false);
+  const [newProvider, setNewProvider] = useState('');
+  const [newAccountType, setNewAccountType] = useState('');
+  const [newBalance, setNewBalance] = useState('');
+
   useEffect(() => {
     if (profile) {
       setFullName(profile.full_name ?? '');
@@ -20,6 +66,20 @@ export function Profile() {
       setLanguage(profile.language ?? 'en');
     }
   }, [profile]);
+
+  useEffect(() => {
+    if (!user) return;
+    supabase.from('notification_preferences').select('*').eq('user_id', user.id).single()
+      .then(({ data }) => { if (data) setPrefs(data as NotificationPrefs); });
+    loadLinkedAccounts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
+  const loadLinkedAccounts = async () => {
+    if (!user) return;
+    const { data } = await supabase.from('linked_accounts').select('*').eq('user_id', user.id).order('created_at');
+    setLinkedAccounts((data as LinkedAccount[]) ?? []);
+  };
 
   const initials = (fullName || profile?.full_name || 'U')
     .split(' ')
@@ -39,6 +99,82 @@ export function Profile() {
     setSaving(false);
     setSaveMessage(error ? `Error: ${error.message}` : 'Saved');
     if (!error) await refreshProfile();
+  };
+
+  const handleChangePassword = async () => {
+    setPasswordMessage(null);
+    if (newPassword.length < 6) {
+      setPasswordMessage('Error: password must be at least 6 characters');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPasswordMessage("Error: passwords don't match");
+      return;
+    }
+    setChangingPassword(true);
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    setChangingPassword(false);
+    setPasswordMessage(error ? `Error: ${error.message}` : 'Password updated');
+    if (!error) {
+      setNewPassword('');
+      setConfirmPassword('');
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (deleteConfirmText !== 'DELETE') return;
+    setDeleting(true);
+    setDeleteError(null);
+    const { data: sessionData } = await supabase.auth.getSession();
+    const token = sessionData.session?.access_token;
+    const { data, error } = await supabase.functions.invoke('delete-account', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setDeleting(false);
+    if (error || data?.error) {
+      setDeleteError(error?.message || data?.error || 'Failed to delete account');
+      return;
+    }
+    await signOut();
+  };
+
+  const togglePref = async (key: keyof NotificationPrefs) => {
+    if (!user || !prefs) return;
+    const updated = { ...prefs, [key]: !prefs[key] };
+    setPrefs(updated);
+    await supabase
+      .from('notification_preferences')
+      .update({ [key]: updated[key], updated_at: new Date().toISOString() })
+      .eq('user_id', user.id);
+  };
+
+  const handleSetPrimary = async (accountId: string) => {
+    if (!user) return;
+    await supabase.from('linked_accounts').update({ is_primary: false }).eq('user_id', user.id);
+    await supabase.from('linked_accounts').update({ is_primary: true }).eq('id', accountId);
+    loadLinkedAccounts();
+  };
+
+  const handleRemoveAccount = async (accountId: string) => {
+    await supabase.from('linked_accounts').delete().eq('id', accountId);
+    loadLinkedAccounts();
+  };
+
+  const handleAddAccount = async () => {
+    if (!user || !newProvider || !newAccountType || !newBalance) return;
+    await supabase.from('linked_accounts').insert({
+      user_id: user.id,
+      provider_name: newProvider,
+      account_type: newAccountType,
+      balance: Number(newBalance),
+      is_primary: linkedAccounts.length === 0,
+      icon: '🏦',
+    });
+    setNewProvider('');
+    setNewAccountType('');
+    setNewBalance('');
+    setShowAddAccount(false);
+    loadLinkedAccounts();
   };
 
   return (
@@ -83,44 +219,28 @@ export function Profile() {
           <nav className="flex gap-2 p-2">
             <button
               onClick={() => setActiveTab('profile')}
-              className={`flex items-center gap-2 py-3 px-4 rounded-lg transition ${
-                activeTab === 'profile'
-                  ? 'bg-blue-50 text-blue-600 font-medium'
-                  : 'text-gray-600 hover:bg-gray-50'
-              }`}
+              className={`flex items-center gap-2 py-3 px-4 rounded-lg transition ${activeTab === 'profile' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 hover:bg-gray-50'}`}
             >
               <User className="w-4 h-4" />
               Profile
             </button>
             <button
               onClick={() => setActiveTab('security')}
-              className={`flex items-center gap-2 py-3 px-4 rounded-lg transition ${
-                activeTab === 'security'
-                  ? 'bg-blue-50 text-blue-600 font-medium'
-                  : 'text-gray-600 hover:bg-gray-50'
-              }`}
+              className={`flex items-center gap-2 py-3 px-4 rounded-lg transition ${activeTab === 'security' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 hover:bg-gray-50'}`}
             >
               <Shield className="w-4 h-4" />
               Security
             </button>
             <button
               onClick={() => setActiveTab('notifications')}
-              className={`flex items-center gap-2 py-3 px-4 rounded-lg transition ${
-                activeTab === 'notifications'
-                  ? 'bg-blue-50 text-blue-600 font-medium'
-                  : 'text-gray-600 hover:bg-gray-50'
-              }`}
+              className={`flex items-center gap-2 py-3 px-4 rounded-lg transition ${activeTab === 'notifications' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 hover:bg-gray-50'}`}
             >
               <Bell className="w-4 h-4" />
               Notifications
             </button>
             <button
               onClick={() => setActiveTab('linked')}
-              className={`flex items-center gap-2 py-3 px-4 rounded-lg transition ${
-                activeTab === 'linked'
-                  ? 'bg-blue-50 text-blue-600 font-medium'
-                  : 'text-gray-600 hover:bg-gray-50'
-              }`}
+              className={`flex items-center gap-2 py-3 px-4 rounded-lg transition ${activeTab === 'linked' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 hover:bg-gray-50'}`}
             >
               <CreditCard className="w-4 h-4" />
               Linked Accounts
@@ -136,9 +256,7 @@ export function Profile() {
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Personal Information</h3>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Full Name
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
                     <div className="relative">
                       <input
                         type="text"
@@ -153,9 +271,7 @@ export function Profile() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Email Address
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
                     <div className="flex gap-2">
                       <Mail className="w-5 h-5 text-gray-400 mt-3" />
                       <input
@@ -169,9 +285,7 @@ export function Profile() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Phone Number
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
                     <div className="flex gap-2">
                       <Phone className="w-5 h-5 text-gray-400 mt-3" />
                       <input
@@ -185,46 +299,23 @@ export function Profile() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Location
-                    </label>
-                    <div className="flex gap-2">
-                      <MapPin className="w-5 h-5 text-gray-400 mt-3" />
-                      <input
-                        type="text"
-                        defaultValue="Kigali, Rwanda"
-                        disabled
-                        title="Location isn't stored yet. Coming in a later update"
-                        className="flex-1 px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500 outline-none cursor-not-allowed"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Preferred Language
-                    </label>
-                    <div className="flex gap-2">
-                      <Globe className="w-5 h-5 text-gray-400 mt-3" />
-                      <select
-                        value={language}
-                        onChange={(e) => setLanguage(e.target.value)}
-                        className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                      >
-                        <option value="en">English</option>
-                        <option value="rw">Kinyarwanda</option>
-                        <option value="fr">Français</option>
-                        <option value="sw">Swahili</option>
-                      </select>
-                    </div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Preferred Language</label>
+                    <select
+                      value={language}
+                      onChange={(e) => setLanguage(e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                    >
+                      <option value="en">English</option>
+                      <option value="rw">Kinyarwanda</option>
+                      <option value="fr">Français</option>
+                      <option value="sw">Swahili</option>
+                    </select>
                   </div>
                 </div>
               </div>
 
               {saveMessage && (
-                <p className={`text-sm ${saveMessage.startsWith('Error') ? 'text-red-600' : 'text-green-600'}`}>
-                  {saveMessage}
-                </p>
+                <p className={`text-sm ${saveMessage.startsWith('Error') ? 'text-red-600' : 'text-green-600'}`}>{saveMessage}</p>
               )}
 
               <div className="flex gap-3 pt-4">
@@ -235,19 +326,6 @@ export function Profile() {
                 >
                   {saving ? 'Saving…' : 'Save Changes'}
                 </button>
-                <button
-                  onClick={() => {
-                    if (profile) {
-                      setFullName(profile.full_name ?? '');
-                      setPhone(profile.phone ?? '');
-                      setLanguage(profile.language ?? 'en');
-                    }
-                    setSaveMessage(null);
-                  }}
-                  className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition"
-                >
-                  Cancel
-                </button>
               </div>
             </div>
           )}
@@ -256,58 +334,32 @@ export function Profile() {
           {activeTab === 'security' && (
             <div className="max-w-2xl space-y-6">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Security Settings</h3>
-
-                <div className="space-y-4">
-                  <div className="p-4 border border-gray-200 rounded-lg">
-                    <div className="flex items-center justify-between mb-2">
-                      <div>
-                        <p className="font-medium text-gray-900">Change Password</p>
-                        <p className="text-sm text-gray-600">Last changed 30 days ago</p>
-                      </div>
-                      <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
-                        Update
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="p-4 border border-gray-200 rounded-lg">
-                    <div className="flex items-center justify-between mb-2">
-                      <div>
-                        <p className="font-medium text-gray-900">Two-Factor Authentication</p>
-                        <p className="text-sm text-gray-600">Add an extra layer of security</p>
-                      </div>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" className="sr-only peer" />
-                        <div className="w-11 h-6 bg-gray-200 peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                      </label>
-                    </div>
-                  </div>
-
-                  <div className="p-4 border border-gray-200 rounded-lg">
-                    <div className="flex items-center justify-between mb-2">
-                      <div>
-                        <p className="font-medium text-gray-900">PIN Code</p>
-                        <p className="text-sm text-gray-600">4-digit PIN for transactions</p>
-                      </div>
-                      <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
-                        Change PIN
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="p-4 border border-gray-200 rounded-lg">
-                    <div className="flex items-center justify-between mb-2">
-                      <div>
-                        <p className="font-medium text-gray-900">Biometric Authentication</p>
-                        <p className="text-sm text-gray-600">Use fingerprint or face recognition</p>
-                      </div>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" defaultChecked className="sr-only peer" />
-                        <div className="w-11 h-6 bg-gray-200 peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                      </label>
-                    </div>
-                  </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Change Password</h3>
+                <div className="p-4 border border-gray-200 rounded-lg space-y-3">
+                  <input
+                    type="password"
+                    placeholder="New password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <input
+                    type="password"
+                    placeholder="Confirm new password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  {passwordMessage && (
+                    <p className={`text-sm ${passwordMessage.startsWith('Error') ? 'text-red-600' : 'text-green-600'}`}>{passwordMessage}</p>
+                  )}
+                  <button
+                    onClick={handleChangePassword}
+                    disabled={changingPassword}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+                  >
+                    {changingPassword ? 'Updating…' : 'Update Password'}
+                  </button>
                 </div>
               </div>
 
@@ -316,8 +368,11 @@ export function Profile() {
                   <Lock className="w-4 h-4" />
                   Danger Zone
                 </h4>
-                <p className="text-sm text-red-700 mb-3">Permanently delete your account and all associated data</p>
-                <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+                <p className="text-sm text-red-700 mb-3">Permanently delete your account and all associated data. This cannot be undone.</p>
+                <button
+                  onClick={() => setShowDeleteConfirm(true)}
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+                >
                   Delete Account
                 </button>
               </div>
@@ -328,29 +383,29 @@ export function Profile() {
           {activeTab === 'notifications' && (
             <div className="max-w-2xl space-y-4">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Notification Preferences</h3>
-
-              <div className="space-y-3">
-                {[
-                  { title: 'Payment Notifications', description: 'Alerts for incoming and outgoing payments', enabled: true },
-                  { title: 'Credit Score Updates', description: 'Monthly credit score changes', enabled: true },
-                  { title: 'Budget Alerts', description: 'When you exceed budget limits', enabled: true },
-                  { title: 'Savings Goals', description: 'Progress updates on your goals', enabled: true },
-                  { title: 'Learning Reminders', description: 'Weekly learning module suggestions', enabled: false },
-                  { title: 'Promotional Offers', description: 'Special offers and promotions', enabled: false },
-                  { title: 'Security Alerts', description: 'Login and security notifications', enabled: true },
-                ].map((notification, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                    <div>
-                      <p className="font-medium text-gray-900">{notification.title}</p>
-                      <p className="text-sm text-gray-600">{notification.description}</p>
+              {!prefs ? (
+                <p className="text-sm text-gray-500">Loading…</p>
+              ) : (
+                <div className="space-y-3">
+                  {PREF_LABELS.map(({ key, title, description }) => (
+                    <div key={key} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                      <div>
+                        <p className="font-medium text-gray-900">{title}</p>
+                        <p className="text-sm text-gray-600">{description}</p>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={prefs[key]}
+                          onChange={() => togglePref(key)}
+                          className="sr-only peer"
+                        />
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                      </label>
                     </div>
-                    <label className="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" defaultChecked={notification.enabled} className="sr-only peer" />
-                      <div className="w-11 h-6 bg-gray-200 peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                    </label>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
@@ -359,76 +414,89 @@ export function Profile() {
             <div className="max-w-2xl space-y-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Linked Payment Accounts</h3>
 
-              <div className="space-y-4">
-                <div className="p-4 border-2 border-green-200 bg-green-50 rounded-lg">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-yellow-400 rounded-lg flex items-center justify-center text-xs font-bold">
-                        MTN
-                      </div>
-                      <div>
-                        <p className="font-medium text-gray-900">MTN Mobile Money</p>
-                        <p className="text-sm text-gray-600">**** **** 3456</p>
+              {linkedAccounts.length === 0 ? (
+                <p className="text-sm text-gray-500">No accounts linked yet.</p>
+              ) : (
+                <div className="space-y-4">
+                  {linkedAccounts.map((acc) => (
+                    <div key={acc.id} className={`p-4 border-2 rounded-lg ${acc.is_primary ? 'border-green-200 bg-green-50' : 'border-gray-200'}`}>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-xl border border-gray-200">
+                            {acc.icon || '🏦'}
+                          </div>
+                          <div>
+                            <p className="font-medium text-gray-900">{acc.provider_name}</p>
+                            <p className="text-sm text-gray-600">{acc.account_type} · RWF {Number(acc.balance).toLocaleString()}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {acc.is_primary ? (
+                            <span className="flex items-center gap-1 text-xs text-green-600 bg-green-100 px-2 py-1 rounded-full">
+                              <Star className="w-3 h-3 fill-current" /> Primary
+                            </span>
+                          ) : (
+                            <button
+                              onClick={() => handleSetPrimary(acc.id)}
+                              className="px-3 py-1 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition"
+                            >
+                              Set as Primary
+                            </button>
+                          )}
+                          <button
+                            onClick={() => handleRemoveAccount(acc.id)}
+                            className="px-3 py-1 text-sm text-red-600 hover:bg-red-50 rounded-lg transition flex items-center gap-1"
+                          >
+                            <Trash2 className="w-3 h-3" /> Remove
+                          </button>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded-full">Primary</span>
-                      <button className="px-3 py-1 text-sm text-red-600 hover:bg-red-50 rounded-lg transition">
-                        Remove
-                      </button>
-                    </div>
+                  ))}
+                </div>
+              )}
+
+              {showAddAccount ? (
+                <div className="p-4 border border-gray-200 rounded-lg space-y-3">
+                  <input
+                    type="text"
+                    placeholder="Provider name (e.g. MTN Mobile Money)"
+                    value={newProvider}
+                    onChange={(e) => setNewProvider(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Account type (e.g. Mobile Wallet, Savings)"
+                    value={newAccountType}
+                    onChange={(e) => setNewAccountType(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <input
+                    type="number"
+                    placeholder="Current balance (RWF)"
+                    value={newBalance}
+                    onChange={(e) => setNewBalance(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <div className="flex gap-2">
+                    <button onClick={handleAddAccount} className="flex-1 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition">
+                      Save
+                    </button>
+                    <button onClick={() => setShowAddAccount(false)} className="flex-1 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                      Cancel
+                    </button>
                   </div>
                 </div>
-
-                <div className="p-4 border border-gray-200 rounded-lg">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center text-xs font-bold text-white">
-                        AIRTEL
-                      </div>
-                      <div>
-                        <p className="font-medium text-gray-900">Airtel Money</p>
-                        <p className="text-sm text-gray-600">**** **** 7890</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <button className="px-3 py-1 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition">
-                        Set as Primary
-                      </button>
-                      <button className="px-3 py-1 text-sm text-red-600 hover:bg-red-50 rounded-lg transition">
-                        Remove
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-4 border border-gray-200 rounded-lg">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-xs font-bold text-white">
-                        BANK
-                      </div>
-                      <div>
-                        <p className="font-medium text-gray-900">Bank of Kigali</p>
-                        <p className="text-sm text-gray-600">**** **** 1234</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <button className="px-3 py-1 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition">
-                        Set as Primary
-                      </button>
-                      <button className="px-3 py-1 text-sm text-red-600 hover:bg-red-50 rounded-lg transition">
-                        Remove
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                <button className="w-full py-4 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-500 hover:text-blue-600 transition flex items-center justify-center gap-2">
-                  <CreditCard className="w-5 h-5" />
+              ) : (
+                <button
+                  onClick={() => setShowAddAccount(true)}
+                  className="w-full py-4 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-500 hover:text-blue-600 transition flex items-center justify-center gap-2"
+                >
+                  <Plus className="w-5 h-5" />
                   <span className="font-medium">Link New Account</span>
                 </button>
-              </div>
+              )}
             </div>
           )}
         </div>
@@ -450,6 +518,42 @@ export function Profile() {
           </button>
         </div>
       </div>
+
+      {/* Delete Account Confirmation Modal */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full">
+            <h3 className="text-xl font-bold text-red-900 mb-3">Delete your account?</h3>
+            <p className="text-sm text-gray-600 mb-4">
+              This permanently deletes your account and everything tied to it: budgets, transactions, savings goals,
+              credit score history, loans, and payment history. This cannot be undone.
+            </p>
+            <p className="text-sm text-gray-700 mb-2">Type <strong>DELETE</strong> to confirm:</p>
+            <input
+              type="text"
+              value={deleteConfirmText}
+              onChange={(e) => setDeleteConfirmText(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-red-500 mb-4"
+            />
+            {deleteError && <p className="text-sm text-red-600 mb-3">{deleteError}</p>}
+            <div className="flex gap-3">
+              <button
+                onClick={handleDeleteAccount}
+                disabled={deleteConfirmText !== 'DELETE' || deleting}
+                className="flex-1 py-3 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition disabled:opacity-50"
+              >
+                {deleting ? 'Deleting…' : 'Permanently Delete'}
+              </button>
+              <button
+                onClick={() => { setShowDeleteConfirm(false); setDeleteConfirmText(''); setDeleteError(null); }}
+                className="flex-1 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

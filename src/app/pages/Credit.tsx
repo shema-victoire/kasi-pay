@@ -159,23 +159,23 @@ export function Credit() {
           <div>
             <div className="flex items-center gap-2 mb-2">
               <Award className="w-6 h-6" />
-              <p className="text-purple-100">Your KASI PAY Credit Score</p>
+              <p className="text-white/80">Your KASI PAY Credit Score</p>
             </div>
             <div className="flex items-baseline gap-3">
               <h2 className="text-6xl font-bold">{score}</h2>
             </div>
-            <p className="text-purple-100 mt-2">
+            <p className="text-white/80 mt-2">
               {score >= 700 ? 'Excellent. You qualify for our best rates' : score >= 500 ? 'Good. Building your credit profile' : 'Getting started. Use the app more to build your score'}
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-              <p className="text-sm text-purple-100 mb-1">Max Loan</p>
+              <p className="text-sm text-white/80 mb-1">Max Loan</p>
               <p className="text-2xl font-bold">RWF {(maxLoanAmount / 1000).toFixed(0)}K</p>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-              <p className="text-sm text-purple-100 mb-1">Interest Rate</p>
+              <p className="text-sm text-white/80 mb-1">Interest Rate</p>
               <p className="text-2xl font-bold">{interestRate}%</p>
             </div>
           </div>
@@ -269,7 +269,7 @@ export function Credit() {
               <button
                 onClick={handleApply}
                 disabled={applying}
-                className="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:shadow-lg transition disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full py-4 kp-gradient-primary text-white rounded-lg font-semibold hover:shadow-lg transition disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 <Zap className="w-5 h-5" />
                 {applying ? 'Processing…' : 'Apply for Instant Credit'}
@@ -427,7 +427,7 @@ export function Credit() {
 
             <button
               onClick={() => setShowApplication(false)}
-              className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:shadow-lg transition"
+              className="w-full py-3 kp-gradient-primary text-white rounded-lg font-semibold hover:shadow-lg transition"
             >
               Done
             </button>

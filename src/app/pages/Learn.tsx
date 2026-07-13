@@ -267,17 +267,17 @@ export function Learn() {
           </div>
 
           {/* Quick Quiz */}
-          <div className="bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950/40 dark:to-blue-950/40 rounded-xl border border-purple-200 dark:border-purple-900 p-6">
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-              <Brain className="w-5 h-5 text-purple-600" />
+          <div className="kp-gradient-primary rounded-xl p-6">
+            <h3 className="font-semibold text-white mb-3 flex items-center gap-2">
+              <Brain className="w-5 h-5 text-white/80" />
               Daily Quiz
             </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            <p className="text-sm text-white/80 mb-4">
               {quizScore !== null ? `Last score: ${quizScore}%. Try again to improve` : 'Test your knowledge and earn points!'}
             </p>
             <button
               onClick={() => setShowQuiz(true)}
-              className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-medium hover:shadow-lg transition"
+              className="w-full py-3 bg-white/20 backdrop-blur-sm text-white rounded-lg font-medium hover:bg-white/30 transition"
             >
               Start Quiz
             </button>
@@ -340,7 +340,7 @@ export function Learn() {
                   <p className="text-xs text-gray-600 dark:text-gray-400">Lessons</p>
                 </div>
                 <div className="p-3 bg-gray-50 dark:bg-gray-900 rounded-lg">
-                  <p className="text-2xl font-bold text-purple-600">{selected.duration}</p>
+                  <p className="text-2xl font-bold text-[#4a8c5e]">{selected.duration}</p>
                   <p className="text-xs text-gray-600 dark:text-gray-400">Duration</p>
                 </div>
                 <div className="p-3 bg-gray-50 dark:bg-gray-900 rounded-lg">
@@ -352,7 +352,7 @@ export function Learn() {
 
             <button
               onClick={() => markComplete(selected.id)}
-              className="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:shadow-lg transition flex items-center justify-center gap-2"
+              className="w-full py-4 kp-gradient-primary text-white rounded-lg font-semibold hover:shadow-lg transition flex items-center justify-center gap-2"
             >
               <Play className="w-5 h-5" />
               {selected.completed ? 'Mark as Reviewed' : 'Complete Module'}
@@ -396,7 +396,7 @@ export function Learn() {
                 </p>
                 <button
                   onClick={closeQuiz}
-                  className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-semibold hover:shadow-lg transition"
+                  className="w-full py-3 kp-gradient-primary text-white rounded-lg font-semibold hover:shadow-lg transition"
                 >
                   Done
                 </button>

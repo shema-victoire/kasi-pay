@@ -60,9 +60,9 @@ export function Payment() {
 
         {/* Payment Tips */}
         <div className="space-y-4">
-          <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/40 dark:to-purple-950/40 rounded-xl p-6 border border-blue-100 dark:border-blue-900">
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-3">💡 Payment Tips</h3>
-            <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+          <div className="kp-gradient-primary rounded-xl p-6">
+            <h3 className="font-semibold text-white mb-3">💡 Payment Tips</h3>
+            <ul className="space-y-2 text-sm text-white/80">
               <li className="flex gap-2"><span>•</span><span>Always verify recipient details before sending</span></li>
               <li className="flex gap-2"><span>•</span><span>QR codes are the fastest and most secure method</span></li>
               <li className="flex gap-2"><span>•</span><span>USSD works without internet connection</span></li>

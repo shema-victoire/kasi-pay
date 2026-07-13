@@ -198,7 +198,7 @@ export function Manage() {
         <div className="bg-white dark:bg-[#1a1a1a] rounded-xl border border-gray-200 dark:border-gray-800 dark:border-gray-800 p-6">
           <div className="flex items-center justify-between mb-2">
             <p className="text-sm text-gray-600 dark:text-gray-400">Total Spent</p>
-            <TrendingUp className="w-5 h-5 text-purple-600" />
+            <TrendingUp className="w-5 h-5 text-[#4a8c5e]" />
           </div>
           <p className="text-2xl font-bold text-gray-900 dark:text-white">RWF {totalSpent.toLocaleString()}</p>
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -279,7 +279,7 @@ export function Manage() {
                         </div>
                         <div className="h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
                           <div
-                            className={`h-full ${isOverBudget ? 'bg-red-500' : 'bg-gradient-to-r from-blue-500 to-purple-500'}`}
+                            className={`h-full ${isOverBudget ? 'bg-red-500' : 'bg-gradient-to-r from-[#4a8c5e] to-[#7fb894]'}`}
                             style={{ width: `${Math.min(percentage, 100)}%` }}
                           />
                         </div>

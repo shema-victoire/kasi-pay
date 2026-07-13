@@ -322,7 +322,7 @@ export function Profile() {
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium hover:shadow-lg transition disabled:opacity-50"
+                  className="px-6 py-3 kp-gradient-primary text-white rounded-lg font-medium hover:shadow-lg transition disabled:opacity-50"
                 >
                   {saving ? 'Saving…' : 'Save Changes'}
                 </button>
